@@ -68,7 +68,7 @@ export function Navbar() {
               }}
             />
             <div className="min-w-0 flex-1">
-              <h1 className={`text-[11px] sm:text-sm lg:text-base font-semibold leading-tight truncate ${isScrolled ? "" : "text-white drop-shadow-lg"}`}>
+              <h1 className={`text-[11px] sm:text-sm lg:text-base font-semibold leading-tight truncate ${isScrolled ? "text-foreground" : "text-white drop-shadow-lg"}`}>
                 {firstLine}
               </h1>
               <p className={`text-[10px] sm:text-xs lg:text-sm truncate ${isScrolled ? "text-muted-foreground" : "text-white/80 drop-shadow"}`}>
