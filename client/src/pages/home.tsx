@@ -15,8 +15,8 @@ export default function Home() {
         <HeroSection />
         <AboutSection />
         <DonationSection />
-        <GallerySection />
         <NoticesSection />
+        <GallerySection />
         <ContactSection />
       </main>
       <Footer />
