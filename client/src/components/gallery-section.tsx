@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ImageIcon, X, Play, Star } from "lucide-react";
+import { ImageIcon, X, Play, Star, Facebook } from "lucide-react";
 import { useState } from "react";
 import type { GalleryImage } from "@shared/schema";
 
@@ -137,8 +137,13 @@ export function GallerySection() {
                             (e.target as HTMLImageElement).src = "https://placehold.co/400x400/1f2937/ffffff?text=Video";
                           }}
                         />
+                      ) : (image.imageUrl.includes("facebook.com") || image.imageUrl.includes("fb.com")) ? (
+                        <div className="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 flex flex-col items-center justify-center gap-2">
+                          <Facebook className="h-10 w-10 text-white" />
+                          <span className="text-white/80 text-xs font-medium">Facebook Video</span>
+                        </div>
                       ) : isEmbedUrl(image.imageUrl) ? (
-                        <div className="w-full h-full bg-gradient-to-br from-blue-900 to-blue-950 flex items-center justify-center">
+                        <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
                           <Play className="h-12 w-12 text-white/70" />
                         </div>
                       ) : (
