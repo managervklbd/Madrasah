@@ -56,8 +56,7 @@ export default function HeroSlidesManage() {
 
   const { uploadFile, isUploading, progress } = useUpload({
     onSuccess: (response) => {
-      const publicUrl = `https://storage.googleapis.com/${process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID || 'replit-objstore'}/${response.objectPath}`;
-      form.setValue("mediaUrl", publicUrl);
+      form.setValue("mediaUrl", response.objectPath);
       toast({ title: "সফল!", description: "ফাইল আপলোড হয়েছে" });
     },
     onError: () => {
