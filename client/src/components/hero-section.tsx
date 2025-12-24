@@ -30,14 +30,14 @@ export function HeroSection() {
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center py-24 pt-32">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center py-16 pt-24 sm:py-24 sm:pt-32">
         <div className="mb-8 flex justify-center">
           <div className="relative">
             <div className="absolute inset-0 bg-white/20 rounded-full blur-xl scale-110" />
             <img
               src={logoSrc}
               alt="মাদ্রাসা লোগো"
-              className="relative h-32 lg:h-40 w-auto drop-shadow-2xl"
+              className="relative h-24 sm:h-32 lg:h-40 w-auto drop-shadow-2xl"
               data-testid="img-hero-logo"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = defaultLogo;
@@ -55,13 +55,13 @@ export function HeroSection() {
         ) : (
           <>
             <h1
-              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 drop-shadow-lg leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 drop-shadow-lg leading-tight"
               data-testid="text-hero-name"
             >
               {hero?.name || "মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা"}
             </h1>
             <p
-              className="text-xl sm:text-2xl lg:text-3xl text-orange-300 font-semibold mb-6 drop-shadow"
+              className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-orange-300 font-semibold mb-6 drop-shadow"
               data-testid="text-hero-slogan"
             >
               {hero?.slogan || "দ্বীনি শিক্ষায় আদর্শ মানুষ গড়ার প্রত্যয়ে"}

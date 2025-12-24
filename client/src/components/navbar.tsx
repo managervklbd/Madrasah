@@ -67,11 +67,11 @@ export function Navbar() {
                 (e.target as HTMLImageElement).src = defaultLogo;
               }}
             />
-            <div className="hidden sm:block">
-              <h1 className={`text-sm lg:text-base font-semibold leading-tight ${isScrolled ? "" : "text-white drop-shadow-lg"}`}>
+            <div className="block">
+              <h1 className={`text-xs sm:text-sm lg:text-base font-semibold leading-tight ${isScrolled ? "" : "text-white drop-shadow-lg"}`}>
                 {firstLine}
               </h1>
-              <p className={`text-xs lg:text-sm ${isScrolled ? "text-muted-foreground" : "text-white/80 drop-shadow"}`}>
+              <p className={`text-[10px] sm:text-xs lg:text-sm ${isScrolled ? "text-muted-foreground" : "text-white/80 drop-shadow"} hidden xs:block sm:block`}>
                 {secondLine}
               </p>
             </div>
@@ -135,8 +135,8 @@ export function Navbar() {
                 {link.label}
               </Button>
             ))}
-            <div className="pt-4 border-t border-border flex gap-2">
-              <a href="tel:01883525652" className="flex-1">
+            <div className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
+              <a href="tel:01883525652" className="w-full sm:flex-1">
                 <Button variant="outline" className="w-full">
                   <Phone className="h-4 w-4 mr-2" />
                   কল করুন
@@ -146,7 +146,7 @@ export function Navbar() {
                 href="https://www.facebook.com/kamheatimkhanamadrasah"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1"
+                className="w-full sm:flex-1"
               >
                 <Button variant="default" className="w-full">
                   <Facebook className="h-4 w-4 mr-2" />

@@ -94,8 +94,8 @@ export function ContactSection() {
               </CardContent>
             </Card>
 
-            <div className="flex gap-4 pt-4">
-              <a href="tel:01883525652" className="flex-1">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <a href="tel:01883525652" className="w-full sm:flex-1">
                 <Button className="w-full" size="lg" data-testid="button-call">
                   <Phone className="h-5 w-5 mr-2" />
                   এখনই কল করুন
@@ -105,7 +105,7 @@ export function ContactSection() {
                 href="https://www.facebook.com/kamheatimkhanamadrasah"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1"
+                className="w-full sm:flex-1"
               >
                 <Button
                   variant="outline"
