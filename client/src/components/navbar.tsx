@@ -57,21 +57,21 @@ export function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink">
             <img
               src={logoSrc}
               alt="মাদ্রাসা লোগো"
-              className="h-12 lg:h-14 w-auto"
+              className="h-10 sm:h-12 lg:h-14 w-auto flex-shrink-0"
               data-testid="img-logo"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = defaultLogo;
               }}
             />
-            <div className="block">
-              <h1 className={`text-xs sm:text-sm lg:text-base font-semibold leading-tight ${isScrolled ? "" : "text-white drop-shadow-lg"}`}>
+            <div className="min-w-0 flex-1">
+              <h1 className={`text-[11px] sm:text-sm lg:text-base font-semibold leading-tight truncate ${isScrolled ? "" : "text-white drop-shadow-lg"}`}>
                 {firstLine}
               </h1>
-              <p className={`text-[10px] sm:text-xs lg:text-sm ${isScrolled ? "text-muted-foreground" : "text-white/80 drop-shadow"} hidden xs:block sm:block`}>
+              <p className={`text-[10px] sm:text-xs lg:text-sm truncate ${isScrolled ? "text-muted-foreground" : "text-white/80 drop-shadow"}`}>
                 {secondLine}
               </p>
             </div>
