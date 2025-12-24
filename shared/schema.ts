@@ -39,6 +39,10 @@ export type InsertGalleryImage = z.infer<typeof insertGalleryImageSchema>;
 export const heroSlides = pgTable("hero_slides", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
+  description: text("description"),
+  badgeText: text("badge_text"),
+  buttonText: text("button_text"),
+  buttonLink: text("button_link"),
   mediaUrl: text("media_url").notNull(),
   mediaType: varchar("media_type", { length: 10 }).notNull().default("image"),
   sortOrder: serial("sort_order"),

@@ -72,6 +72,10 @@ export default function HeroSlidesManage() {
     resolver: zodResolver(insertHeroSlideSchema),
     defaultValues: {
       title: "",
+      description: "",
+      badgeText: "",
+      buttonText: "",
+      buttonLink: "",
       mediaUrl: "",
       mediaType: "image",
     },
@@ -128,6 +132,10 @@ export default function HeroSlidesManage() {
     setEditingSlide(slide);
     form.reset({
       title: slide.title,
+      description: slide.description || "",
+      badgeText: slide.badgeText || "",
+      buttonText: slide.buttonText || "",
+      buttonLink: slide.buttonLink || "",
       mediaUrl: slide.mediaUrl,
       mediaType: slide.mediaType || "image",
     });
@@ -137,6 +145,10 @@ export default function HeroSlidesManage() {
     setEditingSlide(null);
     form.reset({
       title: "",
+      description: "",
+      badgeText: "",
+      buttonText: "",
+      buttonLink: "",
       mediaUrl: "",
       mediaType: "image",
     });
@@ -173,7 +185,22 @@ export default function HeroSlidesManage() {
 
   const SlideForm = () => (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+        <FormField
+          control={form.control}
+          name="badgeText"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ব্যাজ টেক্সট (ঐচ্ছিক)</FormLabel>
+              <FormControl>
+                <Input {...field} value={field.value || ""} placeholder="যেমন: কুরআন শিক্ষা কেন্দ্র" data-testid="input-slide-badge" />
+              </FormControl>
+              <FormDescription>শিরোনামের উপরে ছোট লেবেল</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
         <FormField
           control={form.control}
           name="title"
@@ -188,8 +215,51 @@ export default function HeroSlidesManage() {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>বিবরণ (ঐচ্ছিক)</FormLabel>
+              <FormControl>
+                <Input {...field} value={field.value || ""} placeholder="স্লাইডের বিবরণ লিখুন" data-testid="input-slide-description" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="buttonText"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>বাটন টেক্সট</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ""} placeholder="যোগাযোগ করুন" data-testid="input-slide-button-text" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="buttonLink"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>বাটন লিংক</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || ""} placeholder="#contact" data-testid="input-slide-button-link" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <div className="space-y-2">
-          <Label>ফাইল আপলোড করুন</Label>
+          <Label>ব্যাকগ্রাউন্ড ফাইল আপলোড করুন</Label>
           <div className="flex gap-2">
             <Input
               ref={fileInputRef}
