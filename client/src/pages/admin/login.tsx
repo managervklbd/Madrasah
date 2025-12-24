@@ -3,8 +3,21 @@ import { useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -60,7 +73,11 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto">
-            <img src={logoImage} alt="মাদ্রাসা লোগো" className="h-20 w-auto mx-auto" />
+            <img
+              src={logoImage}
+              alt="মাদ্রাসা লোগো"
+              className="h-20 w-auto mx-auto"
+            />
           </div>
           <div>
             <CardTitle className="text-2xl">অ্যাডমিন লগইন</CardTitle>
@@ -135,11 +152,6 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
               </Button>
             </form>
           </Form>
-          <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-            <p className="text-xs text-muted-foreground text-center">
-              ডেমো অ্যাক্সেস: <strong>admin</strong> / <strong>admin123</strong>
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>

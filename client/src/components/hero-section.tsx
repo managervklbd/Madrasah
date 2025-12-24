@@ -99,7 +99,7 @@ export function HeroSection() {
       return (
         <video
           src={url}
-          className="w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
           autoPlay
           muted
           loop
@@ -112,7 +112,7 @@ export function HeroSection() {
       <img
         src={url}
         alt={slide.title}
-        className="w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover"
       />
     );
   };
