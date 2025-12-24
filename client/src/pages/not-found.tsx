@@ -20,22 +20,26 @@ export default function NotFound() {
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
           পৃষ্ঠা খুঁজে পাওয়া যায়নি
         </h1>
-        
+
         <p className="text-muted-foreground mb-8 text-base sm:text-lg">
-          আপনি যে পৃষ্ঠাটি খুঁজছেন সেটি হয়তো সরানো হয়েছে, নাম পরিবর্তন করা হয়েছে, 
-          অথবা সাময়িকভাবে অনুপলব্ধ।
+          আপনি যে পৃষ্ঠাটি খুঁজছেন সেটি হয়তো সরানো হয়েছে, নাম পরিবর্তন করা
+          হয়েছে, অথবা সাময়িকভাবে অনুপলব্ধ।
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/">
-            <Button size="lg" className="w-full sm:w-auto" data-testid="button-go-home">
+            <Button
+              size="lg"
+              className="w-full sm:w-auto"
+              data-testid="button-go-home"
+            >
               <Home className="w-4 h-4 mr-2" />
               হোম পেজে যান
             </Button>
           </Link>
-          <Button 
-            variant="outline" 
-            size="lg" 
+          <Button
+            variant="outline"
+            size="lg"
             onClick={() => window.history.back()}
             className="w-full sm:w-auto"
             data-testid="button-go-back"
@@ -47,16 +51,16 @@ export default function NotFound() {
 
         <div className="mt-12 pt-8 border-t border-border">
           <p className="text-sm text-muted-foreground">
-            মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা
+            মহজমপুর হাফিজিয়া এতিমখানা মাদ্রাসা
           </p>
           <p className="text-xs text-muted-foreground/70 mt-1">
             ময়মনসিংহ সদর, ময়মনসিংহ
           </p>
           <p className="text-xs text-muted-foreground/60 mt-3">
             Developed by{" "}
-            <a 
-              href="https://maxtechbd.com" 
-              target="_blank" 
+            <a
+              href="https://maxtechbd.com"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >

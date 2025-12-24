@@ -39,12 +39,37 @@ export default function AdminDashboard({
   });
 
   const menuItems = [
-    { id: "dashboard", label: "ড্যাশবোর্ড", icon: LayoutDashboard, href: "/admin/dashboard" },
-    { id: "branding", label: "ব্র্যান্ডিং", icon: Palette, href: "/admin/branding" },
-    { id: "hero", label: "হিরো সেকশন", icon: SlidersHorizontal, href: "/admin/hero" },
-    { id: "about", label: "আমাদের সম্পর্কে", icon: FileText, href: "/admin/about" },
+    {
+      id: "dashboard",
+      label: "ড্যাশবোর্ড",
+      icon: LayoutDashboard,
+      href: "/admin/dashboard",
+    },
+    {
+      id: "branding",
+      label: "ব্র্যান্ডিং",
+      icon: Palette,
+      href: "/admin/branding",
+    },
+    {
+      id: "hero",
+      label: "হিরো সেকশন",
+      icon: SlidersHorizontal,
+      href: "/admin/hero",
+    },
+    {
+      id: "about",
+      label: "আমাদের সম্পর্কে",
+      icon: FileText,
+      href: "/admin/about",
+    },
     { id: "notices", label: "নোটিশ সমূহ", icon: Bell, href: "/admin/notices" },
-    { id: "gallery", label: "ফটো গ্যালারি", icon: Images, href: "/admin/gallery" },
+    {
+      id: "gallery",
+      label: "ফটো গ্যালারি",
+      icon: Images,
+      href: "/admin/gallery",
+    },
   ];
 
   const handleLogout = () => {
@@ -59,7 +84,11 @@ export default function AdminDashboard({
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         data-testid="button-sidebar-toggle"
       >
-        {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        {isSidebarOpen ? (
+          <X className="h-5 w-5" />
+        ) : (
+          <Menu className="h-5 w-5" />
+        )}
       </button>
 
       <aside
@@ -73,7 +102,9 @@ export default function AdminDashboard({
               <img src={logoImage} alt="লোগো" className="h-10 w-auto" />
               <div>
                 <h2 className="font-semibold text-sm">অ্যাডমিন প্যানেল</h2>
-                <p className="text-xs text-muted-foreground">মাদ্রাসা ম্যানেজমেন্ট</p>
+                <p className="text-xs text-muted-foreground">
+                  মাদ্রাসা ম্যানেজমেন্ট
+                </p>
               </div>
             </div>
           </div>
@@ -97,7 +128,11 @@ export default function AdminDashboard({
 
           <div className="p-4 border-t border-sidebar-border space-y-2">
             <Link href="/">
-              <Button variant="outline" className="w-full justify-start gap-3" data-testid="link-view-site">
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-3"
+                data-testid="link-view-site"
+              >
                 <ExternalLink className="h-4 w-4" />
                 ওয়েবসাইট দেখুন
               </Button>
@@ -126,7 +161,8 @@ export default function AdminDashboard({
         <header className="sticky top-0 z-20 bg-background/95 backdrop-blur border-b border-border">
           <div className="flex items-center justify-between gap-4 p-4 pl-16 lg:pl-4">
             <h1 className="text-xl font-semibold">
-              {menuItems.find((item) => item.id === activeTab)?.label || "ড্যাশবোর্ড"}
+              {menuItems.find((item) => item.id === activeTab)?.label ||
+                "ড্যাশবোর্ড"}
             </h1>
             <ThemeToggle />
           </div>
@@ -144,7 +180,10 @@ export default function AdminDashboard({
                     <Bell className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold" data-testid="text-total-notices">
+                    <div
+                      className="text-3xl font-bold"
+                      data-testid="text-total-notices"
+                    >
                       {notices?.length || 0}
                     </div>
                   </CardContent>
@@ -168,7 +207,9 @@ export default function AdminDashboard({
                     <Home className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-lg font-semibold text-green-600">সক্রিয়</div>
+                    <div className="text-lg font-semibold text-green-600">
+                      সক্রিয়
+                    </div>
                   </CardContent>
                 </Card>
                 <Card>
@@ -190,7 +231,9 @@ export default function AdminDashboard({
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">
-                    মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসার অ্যাডমিন প্যানেলে স্বাগতম। এখান থেকে আপনি ওয়েবসাইটের বিভিন্ন সেকশন পরিচালনা করতে পারবেন।
+                    মহজমপুর হাফিজিয়া এতিমখানা মাদ্রাসার অ্যাডমিন প্যানেলে
+                    স্বাগতম। এখান থেকে আপনি ওয়েবসাইটের বিভিন্ন সেকশন পরিচালনা
+                    করতে পারবেন।
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Link href="/admin/hero">

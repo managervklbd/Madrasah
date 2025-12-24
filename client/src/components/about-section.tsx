@@ -40,7 +40,7 @@ export function AboutSection() {
             আমাদের সম্পর্কে
           </span>
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-            মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা
+            মহজমপুর হাফিজিয়া এতিমখানা মাদ্রাসা
           </h2>
           <div className="w-24 h-1 bg-primary mx-auto rounded-full" />
         </div>
@@ -70,7 +70,9 @@ export function AboutSection() {
                         <Target className="h-6 w-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-lg mb-2">আমাদের লক্ষ্য</h3>
+                        <h3 className="font-semibold text-lg mb-2">
+                          আমাদের লক্ষ্য
+                        </h3>
                         <p
                           className="text-muted-foreground"
                           data-testid="text-about-mission"
