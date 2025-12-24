@@ -17,6 +17,8 @@ client/                 # React frontend
       navbar.tsx       # Navigation with logo
       hero-section.tsx # Hero section with madrasa info
       about-section.tsx # About section
+      donation-section.tsx # Donation appeal with contact number
+      gallery-section.tsx # Dynamic photo gallery with lightbox
       notices-section.tsx # Notices board
       contact-section.tsx # Contact information
       footer.tsx       # Site footer
@@ -31,6 +33,7 @@ client/                 # React frontend
         about-manage.tsx # About section editor
         notices-manage.tsx # Notices CRUD
         branding-manage.tsx # Site name & logo settings
+        gallery-manage.tsx # Photo gallery CRUD
 server/                 # Express backend
   routes.ts            # API endpoints
   storage.ts           # Database storage layer
@@ -56,6 +59,10 @@ shared/
 - `POST /api/notices` - Create a notice (protected)
 - `PUT /api/notices/:id` - Update a notice (protected)
 - `DELETE /api/notices/:id` - Delete a notice (protected)
+- `GET /api/gallery` - Get all gallery images
+- `POST /api/gallery` - Add gallery image (protected)
+- `PUT /api/gallery/:id` - Update gallery image (protected)
+- `DELETE /api/gallery/:id` - Delete gallery image (protected)
 - `POST /api/auth/login` - Admin login
 - `POST /api/auth/logout` - Admin logout
 - `GET /api/auth/check` - Check authentication status
@@ -72,6 +79,8 @@ shared/
 - Responsive design
 
 ## Recent Changes
+- December 2024: Added donation section with contact number (01883-525652) for zakat, sadaqah, and fitra
+- December 2024: Added dynamic photo gallery with lightbox and admin management
 - December 2024: Updated contact info (phone, email, Facebook, address)
 - December 2024: Added branding management (logo & site name) to admin dashboard
 - December 2024: Added server-side session authentication for security
