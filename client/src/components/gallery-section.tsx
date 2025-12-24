@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ImageIcon, X, Play, Star, Facebook } from "lucide-react";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ImageIcon, X, Play, Star, Facebook, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useCallback, useEffect } from "react";
 import type { GalleryImage } from "@shared/schema";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 function isEmbedUrl(url: string): boolean {
   return (
@@ -51,6 +54,39 @@ export function GallerySection() {
   });
 
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { 
+      loop: true, 
+      align: "start",
+      slidesToScroll: 1,
+    },
+    [Autoplay({ delay: 3500, stopOnInteraction: false })]
+  );
+
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+  }, [emblaApi, onSelect]);
 
   const featuredItems = images?.filter((img) => img.isFeatured === "true") || [];
   const regularItems = images?.filter((img) => img.isFeatured !== "true") || [];
@@ -117,78 +153,111 @@ export function GallerySection() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {sortedItems.map((image) => (
-              <Card
-                key={image.id}
-                className="group overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
-                onClick={() => setSelectedImage(image)}
-                data-testid={`card-gallery-${image.id}`}
-              >
-                <div className="aspect-square relative overflow-hidden">
-                  {image.mediaType === "video" ? (
-                    <>
-                      {(image.imageUrl.includes("youtube.com") || image.imageUrl.includes("youtu.be")) ? (
-                        <img
-                          src={getYouTubeThumbnail(image.imageUrl) || ""}
-                          alt={image.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "https://placehold.co/400x400/1f2937/ffffff?text=Video";
-                          }}
-                        />
-                      ) : (image.imageUrl.includes("facebook.com") || image.imageUrl.includes("fb.com")) ? (
-                        <div className="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 flex flex-col items-center justify-center gap-2">
-                          <Facebook className="h-10 w-10 text-white" />
-                          <span className="text-white/80 text-xs font-medium">Facebook Video</span>
-                        </div>
-                      ) : isEmbedUrl(image.imageUrl) ? (
-                        <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
-                          <Play className="h-12 w-12 text-white/70" />
-                        </div>
-                      ) : (
-                        <video
-                          src={image.imageUrl}
-                          className="w-full h-full object-cover"
-                          muted
-                          preload="metadata"
-                          onLoadedData={(e) => {
-                            const video = e.target as HTMLVideoElement;
-                            video.currentTime = 0.1;
-                          }}
-                        />
-                      )}
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center">
-                          <Play className="h-6 w-6 text-white ml-1" />
+          <div className="relative">
+            <div className="overflow-hidden" ref={emblaRef}>
+              <div className="flex gap-3 sm:gap-4">
+                {sortedItems.map((image) => (
+                  <div 
+                    key={image.id} 
+                    className="flex-[0_0_50%] min-w-0 sm:flex-[0_0_calc(33.333%-11px)] lg:flex-[0_0_calc(25%-12px)]"
+                  >
+                    <Card
+                      className="group overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+                      onClick={() => setSelectedImage(image)}
+                      data-testid={`card-gallery-${image.id}`}
+                    >
+                      <div className="aspect-square relative overflow-hidden">
+                        {image.mediaType === "video" ? (
+                          <>
+                            {(image.imageUrl.includes("youtube.com") || image.imageUrl.includes("youtu.be")) ? (
+                              <img
+                                src={getYouTubeThumbnail(image.imageUrl) || ""}
+                                alt={image.title}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = "https://placehold.co/400x400/1f2937/ffffff?text=Video";
+                                }}
+                              />
+                            ) : (image.imageUrl.includes("facebook.com") || image.imageUrl.includes("fb.com")) ? (
+                              <div className="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 flex flex-col items-center justify-center gap-2">
+                                <Facebook className="h-10 w-10 text-white" />
+                                <span className="text-white/80 text-xs font-medium">Facebook Video</span>
+                              </div>
+                            ) : isEmbedUrl(image.imageUrl) ? (
+                              <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                                <Play className="h-12 w-12 text-white/70" />
+                              </div>
+                            ) : (
+                              <video
+                                src={image.imageUrl}
+                                className="w-full h-full object-cover"
+                                muted
+                                preload="metadata"
+                                onLoadedData={(e) => {
+                                  const video = e.target as HTMLVideoElement;
+                                  video.currentTime = 0.1;
+                                }}
+                              />
+                            )}
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center">
+                                <Play className="h-6 w-6 text-white ml-1" />
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <img
+                            src={image.imageUrl}
+                            alt={image.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "https://placehold.co/400x400/0d9488/ffffff?text=ছবি";
+                            }}
+                          />
+                        )}
+                        {image.isFeatured === "true" && (
+                          <div className="absolute top-2 right-2">
+                            <Star className="h-5 w-5 text-yellow-400 fill-yellow-400 drop-shadow-lg" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform">
+                          <p className="font-semibold text-sm line-clamp-1">{image.title}</p>
+                          {image.caption && (
+                            <p className="text-xs text-white/80 line-clamp-1">{image.caption}</p>
+                          )}
                         </div>
                       </div>
-                    </>
-                  ) : (
-                    <img
-                      src={image.imageUrl}
-                      alt={image.title}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://placehold.co/400x400/0d9488/ffffff?text=ছবি";
-                      }}
-                    />
-                  )}
-                  {image.isFeatured === "true" && (
-                    <div className="absolute top-2 right-2">
-                      <Star className="h-5 w-5 text-yellow-400 fill-yellow-400 drop-shadow-lg" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform">
-                    <p className="font-semibold text-sm line-clamp-1">{image.title}</p>
-                    {image.caption && (
-                      <p className="text-xs text-white/80 line-clamp-1">{image.caption}</p>
-                    )}
+                    </Card>
                   </div>
-                </div>
-              </Card>
-            ))}
+                ))}
+              </div>
+            </div>
+
+            {sortedItems.length > 4 && (
+              <div className="flex items-center justify-center gap-4 mt-8">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={scrollPrev}
+                  disabled={!canScrollPrev}
+                  className="rounded-full"
+                  data-testid="button-gallery-prev"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={scrollNext}
+                  disabled={!canScrollNext}
+                  className="rounded-full"
+                  data-testid="button-gallery-next"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </div>
         )}
 
