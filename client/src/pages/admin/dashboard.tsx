@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
   LayoutDashboard,
-  Image,
   FileText,
   Bell,
   LogOut,
@@ -42,8 +41,7 @@ export default function AdminDashboard({
   const menuItems = [
     { id: "dashboard", label: "ড্যাশবোর্ড", icon: LayoutDashboard, href: "/admin/dashboard" },
     { id: "branding", label: "ব্র্যান্ডিং", icon: Palette, href: "/admin/branding" },
-    { id: "hero", label: "হিরো সেকশন", icon: Image, href: "/admin/hero" },
-    { id: "hero-slides", label: "হিরো স্লাইডার", icon: SlidersHorizontal, href: "/admin/hero-slides" },
+    { id: "hero", label: "হিরো সেকশন", icon: SlidersHorizontal, href: "/admin/hero" },
     { id: "about", label: "আমাদের সম্পর্কে", icon: FileText, href: "/admin/about" },
     { id: "notices", label: "নোটিশ সমূহ", icon: Bell, href: "/admin/notices" },
     { id: "gallery", label: "ফটো গ্যালারি", icon: Images, href: "/admin/gallery" },
@@ -178,7 +176,7 @@ export default function AdminDashboard({
                     <CardTitle className="text-sm font-medium text-muted-foreground">
                       প্রতিষ্ঠিত
                     </CardTitle>
-                    <Image className="h-4 w-4 text-muted-foreground" />
+                    <Images className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-lg font-semibold">১৯৯০ ইং</div>
@@ -197,7 +195,7 @@ export default function AdminDashboard({
                   <div className="flex flex-wrap gap-2">
                     <Link href="/admin/hero">
                       <Button variant="outline" size="sm">
-                        <Image className="h-4 w-4 mr-2" />
+                        <SlidersHorizontal className="h-4 w-4 mr-2" />
                         হিরো সম্পাদনা
                       </Button>
                     </Link>

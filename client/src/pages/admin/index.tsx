@@ -3,7 +3,6 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import AdminLogin from "./login";
 import AdminDashboard from "./dashboard";
 import BrandingManage from "./branding-manage";
-import HeroManage from "./hero-manage";
 import HeroSlidesManage from "./hero-slides-manage";
 import AboutManage from "./about-manage";
 import NoticesManage from "./notices-manage";
@@ -64,11 +63,6 @@ export default function AdminPages() {
       </Route>
       <Route path="/admin/hero">
         <AdminDashboard onLogout={handleLogout} activeTab="hero">
-          <HeroManage />
-        </AdminDashboard>
-      </Route>
-      <Route path="/admin/hero-slides">
-        <AdminDashboard onLogout={handleLogout} activeTab="hero-slides">
           <HeroSlidesManage />
         </AdminDashboard>
       </Route>
