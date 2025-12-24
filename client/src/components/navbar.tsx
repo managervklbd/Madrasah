@@ -103,7 +103,7 @@ export function Navbar() {
                 ০১৮৮৩-৫২৫৬৫২
               </Button>
             </a>
-            <ThemeToggle />
+            <ThemeToggle isTransparent={!isScrolled} />
             <Button
               variant="ghost"
               size="icon"

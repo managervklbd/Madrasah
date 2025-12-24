@@ -2,7 +2,11 @@ import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme-provider";
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  isTransparent?: boolean;
+}
+
+export function ThemeToggle({ isTransparent = false }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
 
   return (
@@ -11,6 +15,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       data-testid="button-theme-toggle"
+      className={isTransparent ? "text-white hover:bg-white/10" : ""}
     >
       <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
