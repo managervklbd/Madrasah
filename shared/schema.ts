@@ -21,17 +21,32 @@ export const insertNoticeSchema = createInsertSchema(notices).omit({ id: true })
 export type Notice = typeof notices.$inferSelect;
 export type InsertNotice = z.infer<typeof insertNoticeSchema>;
 
-// Gallery images table
+// Gallery items table (images and videos)
 export const galleryImages = pgTable("gallery_images", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   imageUrl: text("image_url").notNull(),
   caption: text("caption"),
+  mediaType: varchar("media_type", { length: 10 }).notNull().default("image"),
+  isFeatured: varchar("is_featured", { length: 5 }).notNull().default("false"),
 });
 
 export const insertGalleryImageSchema = createInsertSchema(galleryImages).omit({ id: true });
 export type GalleryImage = typeof galleryImages.$inferSelect;
 export type InsertGalleryImage = z.infer<typeof insertGalleryImageSchema>;
+
+// Hero slides table (multiple images/videos for carousel)
+export const heroSlides = pgTable("hero_slides", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  mediaUrl: text("media_url").notNull(),
+  mediaType: varchar("media_type", { length: 10 }).notNull().default("image"),
+  sortOrder: serial("sort_order"),
+});
+
+export const insertHeroSlideSchema = createInsertSchema(heroSlides).omit({ id: true, sortOrder: true });
+export type HeroSlide = typeof heroSlides.$inferSelect;
+export type InsertHeroSlide = z.infer<typeof insertHeroSlideSchema>;
 
 // Zod schemas for validation
 export const heroSchema = z.object({

@@ -1,6 +1,6 @@
-import { notices, siteSettings, galleryImages, type Hero, type About, type Notice, type InsertNotice, type Branding, type GalleryImage, type InsertGalleryImage } from "@shared/schema";
+import { notices, siteSettings, galleryImages, heroSlides, type Hero, type About, type Notice, type InsertNotice, type Branding, type GalleryImage, type InsertGalleryImage, type HeroSlide, type InsertHeroSlide } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 
 export interface IStorage {
   getHero(): Promise<Hero>;
@@ -17,6 +17,10 @@ export interface IStorage {
   createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage>;
   updateGalleryImage(id: number, image: InsertGalleryImage): Promise<GalleryImage | null>;
   deleteGalleryImage(id: number): Promise<boolean>;
+  getHeroSlides(): Promise<HeroSlide[]>;
+  createHeroSlide(slide: InsertHeroSlide): Promise<HeroSlide>;
+  updateHeroSlide(id: number, slide: InsertHeroSlide): Promise<HeroSlide | null>;
+  deleteHeroSlide(id: number): Promise<boolean>;
   initializeDefaults(): Promise<void>;
 }
 
@@ -167,6 +171,25 @@ export class DatabaseStorage implements IStorage {
 
   async deleteGalleryImage(id: number): Promise<boolean> {
     const result = await db.delete(galleryImages).where(eq(galleryImages.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getHeroSlides(): Promise<HeroSlide[]> {
+    return await db.select().from(heroSlides).orderBy(asc(heroSlides.sortOrder));
+  }
+
+  async createHeroSlide(slide: InsertHeroSlide): Promise<HeroSlide> {
+    const [newSlide] = await db.insert(heroSlides).values(slide).returning();
+    return newSlide;
+  }
+
+  async updateHeroSlide(id: number, slide: InsertHeroSlide): Promise<HeroSlide | null> {
+    const [updated] = await db.update(heroSlides).set(slide).where(eq(heroSlides.id, id)).returning();
+    return updated || null;
+  }
+
+  async deleteHeroSlide(id: number): Promise<boolean> {
+    const result = await db.delete(heroSlides).where(eq(heroSlides.id, id)).returning();
     return result.length > 0;
   }
 }

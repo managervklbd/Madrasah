@@ -1,7 +1,8 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema, brandingSchema, insertGalleryImageSchema } from "@shared/schema";
+import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema, brandingSchema, insertGalleryImageSchema, insertHeroSlideSchema } from "@shared/schema";
+import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 
 // Admin credentials from environment variables with secure defaults
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
@@ -27,6 +28,9 @@ export async function registerRoutes(
   } catch (error) {
     console.log("Database initialization skipped or already done");
   }
+
+  // Register object storage routes for file uploads
+  registerObjectStorageRoutes(app);
 
   // Auth endpoints
   app.post("/api/auth/login", async (req, res) => {
@@ -250,6 +254,68 @@ export async function registerRoutes(
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete gallery image" });
+    }
+  });
+
+  // Hero slides endpoints
+  app.get("/api/hero-slides", async (req, res) => {
+    try {
+      const slides = await storage.getHeroSlides();
+      res.json(slides);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch hero slides" });
+    }
+  });
+
+  app.post("/api/hero-slides", requireAuth, async (req, res) => {
+    try {
+      const result = insertHeroSlideSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: result.error.errors });
+      }
+      const slide = await storage.createHeroSlide(result.data);
+      res.status(201).json(slide);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create hero slide" });
+    }
+  });
+
+  app.put("/api/hero-slides/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid slide ID" });
+      }
+
+      const result = insertHeroSlideSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: result.error.errors });
+      }
+
+      const slide = await storage.updateHeroSlide(id, result.data);
+      if (!slide) {
+        return res.status(404).json({ error: "Slide not found" });
+      }
+      res.json(slide);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update hero slide" });
+    }
+  });
+
+  app.delete("/api/hero-slides/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid slide ID" });
+      }
+
+      const deleted = await storage.deleteHeroSlide(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Slide not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete hero slide" });
     }
   });
 
