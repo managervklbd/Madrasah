@@ -34,6 +34,7 @@ client/                 # React frontend
         notices-manage.tsx # Notices CRUD
         branding-manage.tsx # Site name & logo settings
         gallery-manage.tsx # Photo gallery CRUD
+        hero-slides-manage.tsx # Hero carousel slides CRUD
 server/                 # Express backend
   routes.ts            # API endpoints
   storage.ts           # Database storage layer
@@ -53,6 +54,10 @@ shared/
 - `POST /api/branding` - Update site branding (protected)
 - `GET /api/hero` - Get hero section data
 - `POST /api/hero` - Update hero section (protected)
+- `GET /api/hero-slides` - Get all hero carousel slides
+- `POST /api/hero-slides` - Create a hero slide (protected)
+- `PUT /api/hero-slides/:id` - Update a hero slide (protected)
+- `DELETE /api/hero-slides/:id` - Delete a hero slide (protected)
 - `GET /api/about` - Get about section data
 - `POST /api/about` - Update about section (protected)
 - `GET /api/notices` - Get all notices
@@ -63,6 +68,7 @@ shared/
 - `POST /api/gallery` - Add gallery image (protected)
 - `PUT /api/gallery/:id` - Update gallery image (protected)
 - `DELETE /api/gallery/:id` - Delete gallery image (protected)
+- `POST /api/uploads/request-url` - Get presigned URL for file upload (protected)
 - `POST /api/auth/login` - Admin login
 - `POST /api/auth/logout` - Admin logout
 - `GET /api/auth/check` - Check authentication status
@@ -79,9 +85,28 @@ shared/
 - Responsive design
 
 ## Recent Changes
+- December 2024: Added file upload support using Replit Object Storage (presigned URL flow)
+- December 2024: Added hero carousel with multiple slides (images and videos), auto-play with navigation controls
+- December 2024: Gallery now supports both images and videos with lightbox playback
+- December 2024: Gallery items can be marked as "featured" to display first
+- December 2024: Added hero slides admin page for carousel management (/admin - হিরো স্লাইড)
 - December 2024: Added donation section with contact number (01883-525652) for zakat, sadaqah, and fitra
 - December 2024: Added dynamic photo gallery with lightbox and admin management
 - December 2024: Updated contact info (phone, email, Facebook, address)
 - December 2024: Added branding management (logo & site name) to admin dashboard
 - December 2024: Added server-side session authentication for security
 - December 2024: Initial implementation with PostgreSQL database
+
+## Object Storage
+- Uses Replit Object Storage with presigned URL upload flow
+- Environment variables: DEFAULT_OBJECT_STORAGE_BUCKET_ID, PUBLIC_OBJECT_SEARCH_PATHS, PRIVATE_OBJECT_DIR
+- Upload endpoint: POST /api/uploads/request-url (returns uploadURL and objectPath)
+- Files stored in 'public' directory for public access
+
+## Database Tables
+- branding: Site name and logo URL
+- hero_settings: Hero section text content
+- hero_slides: Carousel slides with mediaUrl, mediaType, sortOrder
+- about_settings: About section content
+- notices: Announcements with title, description, date
+- gallery_images: Gallery with title, imageUrl, caption, mediaType, isFeatured
