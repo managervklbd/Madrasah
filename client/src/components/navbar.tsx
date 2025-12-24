@@ -43,7 +43,7 @@ export function Navbar() {
   };
 
   const logoSrc = branding?.logoUrl || defaultLogo;
-  const siteNameParts = (branding?.siteName || "মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা").split(" ");
+  const siteNameParts = (branding?.siteName || "মহজমপুর হাফিজিয়া এতিমখানা মাদরাসা").split(" ");
   const firstLine = siteNameParts.slice(0, 2).join(" ");
   const secondLine = siteNameParts.slice(2).join(" ");
 
@@ -95,12 +95,12 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <a
-              href="tel:01728825819"
+              href="tel:01883525652"
               className="hidden lg:flex items-center gap-2"
             >
               <Button variant={isScrolled ? "outline" : "secondary"} size="sm">
                 <Phone className="h-4 w-4 mr-1" />
-                ০১৭২৮-৮২৫৮১৯
+                ০১৮৮৩-৫২৫৬৫২
               </Button>
             </a>
             <ThemeToggle />
@@ -136,14 +136,14 @@ export function Navbar() {
               </Button>
             ))}
             <div className="pt-4 border-t border-border flex gap-2">
-              <a href="tel:01728825819" className="flex-1">
+              <a href="tel:01883525652" className="flex-1">
                 <Button variant="outline" className="w-full">
                   <Phone className="h-4 w-4 mr-2" />
                   কল করুন
                 </Button>
               </a>
               <a
-                href="https://facebook.com/mhem1990"
+                href="https://www.facebook.com/kamheatimkhanamadrasah"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1"

@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Phone, MapPin, Facebook, Heart } from "lucide-react";
+import { Phone, MapPin, Facebook, Heart, Mail } from "lucide-react";
 import logoImage from "@assets/image_1766561812238.png";
 
 export function Footer() {
@@ -24,16 +24,15 @@ export function Footer() {
                 className="h-12 w-auto"
               />
               <div>
-                <h3 className="font-semibold text-sm">মহাজামপুর হাফিজিয়া</h3>
-                <p className="text-xs text-muted-foreground">এতিমখানা মাদ্রাসা</p>
+                <h3 className="font-semibold text-sm">মহজমপুর হাফিজিয়া</h3>
+                <p className="text-xs text-muted-foreground">এতিমখানা মাদরাসা</p>
               </div>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              দ্বীনি শিক্ষায় আদর্শ মানুষ গড়ার প্রত্যয়ে প্রতিষ্ঠিত একটি অরাজনৈতিক ও অলাভজনক হিফজ মাদ্রাসা।
+              কুরআন মাজিদ শিক্ষা কেন্দ্র - দ্বীনি শিক্ষায় আদর্শ মানুষ গড়ার প্রত্যয়ে প্রতিষ্ঠিত।
             </p>
             <div className="text-sm text-muted-foreground">
               <p>প্রতিষ্ঠিত: ১৯৯০ ইং</p>
-              <p>রেজি: নং ম-০৯৪১</p>
             </div>
           </div>
 
@@ -94,29 +93,38 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                 <span className="text-muted-foreground">
-                  মহাজামপুর দরবার শরীফ,
+                  মহজমপুর, ময়মনসিংহ সদর
                   <br />
-                  সদর, ময়মনসিংহ
+                  ময়মনসিংহ, বাংলাদেশ
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 text-primary shrink-0" />
                 <a
-                  href="tel:01728825819"
+                  href="tel:01883525652"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  ০১৭২৮-৮২৫৮১৯
+                  ০১৮৮৩-৫২৫৬৫২
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="h-4 w-4 text-primary shrink-0" />
+                <a
+                  href="mailto:mohojompureatimkhana1990@gmail.com"
+                  className="text-muted-foreground hover:text-foreground transition-colors text-xs"
+                >
+                  mohojompureatimkhana1990@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Facebook className="h-4 w-4 text-primary shrink-0" />
                 <a
-                  href="https://facebook.com/mhem1990"
+                  href="https://www.facebook.com/kamheatimkhanamadrasah"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  facebook.com/mhem1990
+                  @kamheatimkhanamadrasah
                 </a>
               </li>
             </ul>
@@ -144,7 +152,7 @@ export function Footer() {
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
             <p>
-              &copy; {currentYear} মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা। সর্বস্বত্ব সংরক্ষিত।
+              &copy; {currentYear} মহজমপুর হাফিজিয়া এতিমখানা মাদরাসা। সর্বস্বত্ব সংরক্ষিত।
             </p>
             <p className="flex items-center gap-1">
               <Heart className="h-3 w-3 text-destructive" />

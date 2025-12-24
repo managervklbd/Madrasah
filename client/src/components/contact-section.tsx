@@ -27,9 +27,9 @@ export function ContactSection() {
                   <div>
                     <h3 className="font-semibold text-lg mb-2">ঠিকানা</h3>
                     <p className="text-muted-foreground" data-testid="text-contact-address">
-                      মহাজামপুর দরবার শরীফ, সদর, ময়মনসিংহ
+                      মহজমপুর, ময়মনসিংহ সদর
                       <br />
-                      Shamvugonj, Bangladesh
+                      ময়মনসিংহ, বাংলাদেশ
                     </p>
                   </div>
                 </div>
@@ -45,11 +45,31 @@ export function ContactSection() {
                   <div>
                     <h3 className="font-semibold text-lg mb-2">ফোন নম্বর</h3>
                     <a
-                      href="tel:01728825819"
+                      href="tel:01883525652"
                       className="text-primary hover:underline text-lg"
                       data-testid="link-contact-phone"
                     >
-                      ০১৭২৮-৮২৫৮১৯
+                      ০১৮৮৩-৫২৫৬৫২
+                    </a>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-primary/10 rounded-lg shrink-0">
+                    <Mail className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">ইমেইল</h3>
+                    <a
+                      href="mailto:mohojompureatimkhana1990@gmail.com"
+                      className="text-primary hover:underline"
+                      data-testid="link-contact-email"
+                    >
+                      mohojompureatimkhana1990@gmail.com
                     </a>
                   </div>
                 </div>
@@ -75,14 +95,14 @@ export function ContactSection() {
             </Card>
 
             <div className="flex gap-4 pt-4">
-              <a href="tel:01728825819" className="flex-1">
+              <a href="tel:01883525652" className="flex-1">
                 <Button className="w-full" size="lg" data-testid="button-call">
                   <Phone className="h-5 w-5 mr-2" />
                   এখনই কল করুন
                 </Button>
               </a>
               <a
-                href="https://facebook.com/mhem1990"
+                href="https://www.facebook.com/kamheatimkhanamadrasah"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1"
@@ -127,7 +147,7 @@ export function ContactSection() {
                   সর্বশেষ আপডেট ও খবর পেতে আমাদের পেজ ফলো করুন
                 </p>
                 <a
-                  href="https://facebook.com/mhem1990"
+                  href="https://www.facebook.com/kamheatimkhanamadrasah"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

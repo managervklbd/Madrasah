@@ -1,11 +1,12 @@
-# Mahajampur Hafizia Etimkhana Madrasah Website
+# মহজমপুর হাফিজিয়া এতিমখানা মাদরাসা Website
 
 ## Overview
-A full-stack React + Node.js website for a Bangladeshi Islamic madrasa with a dynamic admin dashboard.
+A full-stack React + Node.js website for a Bangladeshi Islamic madrasa (Quran learning center) with a dynamic admin dashboard.
 
-**Location:** Mahajampur, Shamvugonj, Bangladesh  
-**Phone:** 01728-825819  
-**Facebook:** https://facebook.com/mhem1990
+**Location:** Mohojompur, Mymensingh Sadar, Mymensingh, Bangladesh  
+**Phone:** 01883-525652  
+**Email:** mohojompureatimkhana1990@gmail.com  
+**Facebook:** https://www.facebook.com/kamheatimkhanamadrasah
 
 ## Project Structure
 
@@ -71,6 +72,7 @@ shared/
 - Responsive design
 
 ## Recent Changes
+- December 2024: Updated contact info (phone, email, Facebook, address)
 - December 2024: Added branding management (logo & site name) to admin dashboard
 - December 2024: Added server-side session authentication for security
 - December 2024: Initial implementation with PostgreSQL database
