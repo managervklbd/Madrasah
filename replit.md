@@ -97,11 +97,11 @@ shared/
 - December 2024: Added server-side session authentication for security
 - December 2024: Initial implementation with PostgreSQL database
 
-## Object Storage
-- Uses Replit Object Storage with presigned URL upload flow
-- Environment variables: DEFAULT_OBJECT_STORAGE_BUCKET_ID, PUBLIC_OBJECT_SEARCH_PATHS, PRIVATE_OBJECT_DIR
-- Upload endpoint: POST /api/uploads/request-url (returns uploadURL and objectPath)
-- Files stored in 'public' directory for public access
+## File Upload (Cloudinary)
+- Uses Cloudinary for image and video uploads
+- Environment variables required: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+- Upload endpoint: POST /api/upload (multipart form data)
+- Files stored in 'madrasa' folder on Cloudinary
 
 ## Database Tables
 - branding: Site name and logo URL

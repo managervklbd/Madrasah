@@ -46,7 +46,7 @@ import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { insertGalleryImageSchema, type GalleryImage, type InsertGalleryImage } from "@shared/schema";
 import { useState, useRef } from "react";
-import { useUpload } from "@/hooks/use-upload";
+import { useCloudinaryUpload } from "@/hooks/use-cloudinary-upload";
 
 export default function GalleryManage() {
   const { toast } = useToast();
@@ -55,9 +55,9 @@ export default function GalleryManage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { uploadFile, isUploading, progress } = useUpload({
+  const { uploadFile, isUploading, progress } = useCloudinaryUpload({
     onSuccess: (response) => {
-      form.setValue("imageUrl", response.objectPath);
+      form.setValue("imageUrl", response.url);
       toast({ title: "সফল!", description: "ফাইল আপলোড হয়েছে" });
     },
     onError: () => {

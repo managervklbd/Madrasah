@@ -3,6 +3,10 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema, brandingSchema, insertGalleryImageSchema, insertHeroSlideSchema } from "@shared/schema";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
+import multer from "multer";
+import { uploadToCloudinary } from "./cloudinary";
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Admin credentials from environment variables with secure defaults
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
@@ -29,8 +33,31 @@ export async function registerRoutes(
     console.log("Database initialization skipped or already done");
   }
 
-  // Register object storage routes for file uploads
+  // Register object storage routes for file uploads (legacy)
   registerObjectStorageRoutes(app);
+
+  // Cloudinary upload endpoint
+  app.post("/api/upload", requireAuth, upload.single("file"), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+        return res.status(500).json({ error: "Cloudinary credentials not configured" });
+      }
+
+      const result = await uploadToCloudinary(req.file.buffer, "madrasa");
+      res.json({ 
+        url: result.secure_url,
+        publicId: result.public_id,
+        resourceType: result.resource_type
+      });
+    } catch (error) {
+      console.error("Cloudinary upload error:", error);
+      res.status(500).json({ error: "Failed to upload file" });
+    }
+  });
 
   // Auth endpoints
   app.post("/api/auth/login", async (req, res) => {
