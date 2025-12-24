@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict kD6684TzP5MCZbW30LPKwmhovw6R1sfBEcmnuUD6IZx3PAweWzsaK5NMRHcaVNQ
+\restrict Zf3yAWwSLvp8Wl5ngqQYf4X1UdFhe9cuhpEgs0aArl5H4MR1RIglZgSyLkB1eIe
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.10
@@ -23,7 +23,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: gallery_images; Type: TABLE; Schema: public; Owner: postgres
+-- Name: gallery_images; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.gallery_images (
@@ -36,10 +36,8 @@ CREATE TABLE public.gallery_images (
 );
 
 
-ALTER TABLE public.gallery_images OWNER TO postgres;
-
 --
--- Name: gallery_images_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: gallery_images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.gallery_images_id_seq
@@ -51,17 +49,15 @@ CREATE SEQUENCE public.gallery_images_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.gallery_images_id_seq OWNER TO postgres;
-
 --
--- Name: gallery_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: gallery_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.gallery_images_id_seq OWNED BY public.gallery_images.id;
 
 
 --
--- Name: hero_slides; Type: TABLE; Schema: public; Owner: postgres
+-- Name: hero_slides; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.hero_slides (
@@ -77,10 +73,8 @@ CREATE TABLE public.hero_slides (
 );
 
 
-ALTER TABLE public.hero_slides OWNER TO postgres;
-
 --
--- Name: hero_slides_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: hero_slides_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.hero_slides_id_seq
@@ -92,17 +86,15 @@ CREATE SEQUENCE public.hero_slides_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.hero_slides_id_seq OWNER TO postgres;
-
 --
--- Name: hero_slides_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: hero_slides_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.hero_slides_id_seq OWNED BY public.hero_slides.id;
 
 
 --
--- Name: hero_slides_sort_order_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: hero_slides_sort_order_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.hero_slides_sort_order_seq
@@ -114,17 +106,15 @@ CREATE SEQUENCE public.hero_slides_sort_order_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.hero_slides_sort_order_seq OWNER TO postgres;
-
 --
--- Name: hero_slides_sort_order_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: hero_slides_sort_order_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.hero_slides_sort_order_seq OWNED BY public.hero_slides.sort_order;
 
 
 --
--- Name: notices; Type: TABLE; Schema: public; Owner: postgres
+-- Name: notices; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.notices (
@@ -135,10 +125,8 @@ CREATE TABLE public.notices (
 );
 
 
-ALTER TABLE public.notices OWNER TO postgres;
-
 --
--- Name: notices_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: notices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.notices_id_seq
@@ -150,17 +138,15 @@ CREATE SEQUENCE public.notices_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.notices_id_seq OWNER TO postgres;
-
 --
--- Name: notices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: notices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.notices_id_seq OWNED BY public.notices.id;
 
 
 --
--- Name: site_settings; Type: TABLE; Schema: public; Owner: postgres
+-- Name: site_settings; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.site_settings (
@@ -170,10 +156,8 @@ CREATE TABLE public.site_settings (
 );
 
 
-ALTER TABLE public.site_settings OWNER TO postgres;
-
 --
--- Name: site_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: site_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.site_settings_id_seq
@@ -185,52 +169,91 @@ CREATE SEQUENCE public.site_settings_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.site_settings_id_seq OWNER TO postgres;
-
 --
--- Name: site_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: site_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.site_settings_id_seq OWNED BY public.site_settings.id;
 
 
 --
--- Name: gallery_images id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    username character varying(50) NOT NULL,
+    password text NOT NULL,
+    email character varying(100),
+    role character varying(20) DEFAULT 'admin'::character varying NOT NULL,
+    created_at timestamp without time zone DEFAULT now()
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: gallery_images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.gallery_images ALTER COLUMN id SET DEFAULT nextval('public.gallery_images_id_seq'::regclass);
 
 
 --
--- Name: hero_slides id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: hero_slides id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.hero_slides ALTER COLUMN id SET DEFAULT nextval('public.hero_slides_id_seq'::regclass);
 
 
 --
--- Name: hero_slides sort_order; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: hero_slides sort_order; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.hero_slides ALTER COLUMN sort_order SET DEFAULT nextval('public.hero_slides_sort_order_seq'::regclass);
 
 
 --
--- Name: notices id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: notices id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notices ALTER COLUMN id SET DEFAULT nextval('public.notices_id_seq'::regclass);
 
 
 --
--- Name: site_settings id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: site_settings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.site_settings ALTER COLUMN id SET DEFAULT nextval('public.site_settings_id_seq'::regclass);
 
 
 --
--- Data for Name: gallery_images; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: gallery_images; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.gallery_images (id, title, image_url, caption, media_type, is_featured) FROM stdin;
@@ -241,7 +264,7 @@ COPY public.gallery_images (id, title, image_url, caption, media_type, is_featur
 
 
 --
--- Data for Name: hero_slides; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: hero_slides; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.hero_slides (id, title, media_url, media_type, sort_order, description, badge_text, button_text, button_link) FROM stdin;
@@ -251,7 +274,7 @@ COPY public.hero_slides (id, title, media_url, media_type, sort_order, descripti
 
 
 --
--- Data for Name: notices; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: notices; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.notices (id, title, description, date) FROM stdin;
@@ -262,7 +285,7 @@ COPY public.notices (id, title, description, date) FROM stdin;
 
 
 --
--- Data for Name: site_settings; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: site_settings; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.site_settings (id, key, value) FROM stdin;
@@ -273,42 +296,58 @@ COPY public.site_settings (id, key, value) FROM stdin;
 
 
 --
--- Name: gallery_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.users (id, username, password, email, role, created_at) FROM stdin;
+1	admin	$2b$10$x8eV4UrDgAD0NrFAR2KONerv7l0SyVG212ceg10YpuUYR8y69.8U.	admin@madrasa.com	admin	2025-12-24 11:34:51.234672
+\.
+
+
+--
+-- Name: gallery_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.gallery_images_id_seq', 3, true);
 
 
 --
--- Name: hero_slides_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: hero_slides_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.hero_slides_id_seq', 4, true);
 
 
 --
--- Name: hero_slides_sort_order_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: hero_slides_sort_order_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.hero_slides_sort_order_seq', 4, true);
 
 
 --
--- Name: notices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: notices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.notices_id_seq', 4, true);
 
 
 --
--- Name: site_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: site_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.site_settings_id_seq', 4, true);
 
 
 --
--- Name: gallery_images gallery_images_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+
+
+--
+-- Name: gallery_images gallery_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.gallery_images
@@ -316,7 +355,7 @@ ALTER TABLE ONLY public.gallery_images
 
 
 --
--- Name: hero_slides hero_slides_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: hero_slides hero_slides_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.hero_slides
@@ -324,7 +363,7 @@ ALTER TABLE ONLY public.hero_slides
 
 
 --
--- Name: notices notices_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: notices notices_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notices
@@ -332,7 +371,7 @@ ALTER TABLE ONLY public.notices
 
 
 --
--- Name: site_settings site_settings_key_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: site_settings site_settings_key_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.site_settings
@@ -340,7 +379,7 @@ ALTER TABLE ONLY public.site_settings
 
 
 --
--- Name: site_settings site_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: site_settings site_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.site_settings
@@ -348,8 +387,24 @@ ALTER TABLE ONLY public.site_settings
 
 
 --
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_username_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_unique UNIQUE (username);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-\unrestrict kD6684TzP5MCZbW30LPKwmhovw6R1sfBEcmnuUD6IZx3PAweWzsaK5NMRHcaVNQ
+\unrestrict Zf3yAWwSLvp8Wl5ngqQYf4X1UdFhe9cuhpEgs0aArl5H4MR1RIglZgSyLkB1eIe
 
