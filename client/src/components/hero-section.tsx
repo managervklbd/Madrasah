@@ -6,6 +6,30 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { HeroSlide } from "@shared/schema";
 import { useState, useEffect, useCallback } from "react";
 
+function isEmbedUrl(url: string): boolean {
+  return (
+    url.includes("facebook.com") ||
+    url.includes("fb.com") ||
+    url.includes("youtube.com") ||
+    url.includes("youtu.be") ||
+    url.includes("vimeo.com")
+  );
+}
+
+function getYouTubeEmbedUrl(url: string): string | null {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  if (match && match[2].length === 11) {
+    return `https://www.youtube.com/embed/${match[2]}?autoplay=1&mute=1&loop=1&playlist=${match[2]}&controls=0&showinfo=0`;
+  }
+  return null;
+}
+
+function getFacebookEmbedUrl(url: string): string {
+  const encodedUrl = encodeURIComponent(url);
+  return `https://www.facebook.com/plugins/video.php?href=${encodedUrl}&show_text=false&autoplay=true&muted=true`;
+}
+
 export function HeroSection() {
   const { data: slides, isLoading } = useQuery<HeroSlide[]>({
     queryKey: ["/api/hero-slides"],
@@ -48,10 +72,55 @@ export function HeroSection() {
     }
   };
 
+  const renderMedia = (slide: HeroSlide) => {
+    const url = slide.mediaUrl;
+    
+    if (slide.mediaType === "video" && isEmbedUrl(url)) {
+      let embedSrc = url;
+      
+      if (url.includes("youtube.com") || url.includes("youtu.be")) {
+        embedSrc = getYouTubeEmbedUrl(url) || url;
+      } else if (url.includes("facebook.com") || url.includes("fb.com")) {
+        embedSrc = getFacebookEmbedUrl(url);
+      }
+      
+      return (
+        <iframe
+          src={embedSrc}
+          className="w-full h-full object-cover absolute inset-0"
+          style={{ border: "none", minHeight: "100%", minWidth: "100%" }}
+          allow="autoplay; encrypted-media; fullscreen"
+          allowFullScreen
+        />
+      );
+    }
+    
+    if (slide.mediaType === "video") {
+      return (
+        <video
+          src={url}
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      );
+    }
+    
+    return (
+      <img
+        src={url}
+        alt={slide.title}
+        className="w-full h-full object-cover"
+      />
+    );
+  };
+
   if (isLoading) {
     return (
       <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-[#1a6b5c] via-[#1a7a6d] to-[#0d4a40]">
-        <div className="container mx-auto px-6 lg:px-12">
+        <div className="max-w-6xl mx-auto px-4 w-full">
           <div className="max-w-2xl space-y-6">
             <Skeleton className="h-8 w-32 bg-white/20" />
             <Skeleton className="h-16 w-full bg-white/20" />
@@ -72,8 +141,8 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#1a6b5c] via-[#1a7a6d] to-[#0d4a40]" />
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-50" />
         
-        <div className="relative z-10 container mx-auto px-6 lg:px-12">
-          <div className="max-w-2xl">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 w-full">
+          <div className="max-w-2xl pt-20">
             <Badge className="mb-6 bg-primary/90 text-primary-foreground border-0">
               কুরআন মাজিদ শিক্ষা কেন্দ্র
             </Badge>
@@ -118,32 +187,17 @@ export function HeroSection() {
         <div
           key={slide.id}
           className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentSlide ? "opacity-100" : "opacity-0"
+            index === currentSlide ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         >
-          {slide.mediaType === "video" ? (
-            <video
-              src={slide.mediaUrl}
-              className="w-full h-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
-          ) : (
-            <img
-              src={slide.mediaUrl}
-              alt={slide.title}
-              className="w-full h-full object-cover"
-            />
-          )}
+          {renderMedia(slide)}
         </div>
       ))}
       
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
       
-      <div className="relative z-10 container mx-auto px-6 lg:px-12">
-        <div className="max-w-2xl">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 w-full">
+        <div className="max-w-2xl pt-20">
           {activeSlide.badgeText && (
             <Badge 
               className="mb-6 bg-primary/90 text-primary-foreground border-0"

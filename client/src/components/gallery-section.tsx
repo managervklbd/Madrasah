@@ -5,6 +5,30 @@ import { ImageIcon, X, Play, Star } from "lucide-react";
 import { useState } from "react";
 import type { GalleryImage } from "@shared/schema";
 
+function isEmbedUrl(url: string): boolean {
+  return (
+    url.includes("facebook.com") ||
+    url.includes("fb.com") ||
+    url.includes("youtube.com") ||
+    url.includes("youtu.be") ||
+    url.includes("vimeo.com")
+  );
+}
+
+function getYouTubeEmbedUrl(url: string): string | null {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  if (match && match[2].length === 11) {
+    return `https://www.youtube.com/embed/${match[2]}?autoplay=1&controls=1`;
+  }
+  return null;
+}
+
+function getFacebookEmbedUrl(url: string): string {
+  const encodedUrl = encodeURIComponent(url);
+  return `https://www.facebook.com/plugins/video.php?href=${encodedUrl}&show_text=false`;
+}
+
 export function GallerySection() {
   const { data: images, isLoading } = useQuery<GalleryImage[]>({
     queryKey: ["/api/gallery"],
@@ -15,6 +39,37 @@ export function GallerySection() {
   const featuredItems = images?.filter((img) => img.isFeatured === "true") || [];
   const regularItems = images?.filter((img) => img.isFeatured !== "true") || [];
   const sortedItems = [...featuredItems, ...regularItems];
+
+  const renderVideoEmbed = (url: string, autoplay: boolean = false) => {
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      const embedUrl = getYouTubeEmbedUrl(url);
+      if (embedUrl) {
+        return (
+          <iframe
+            src={autoplay ? embedUrl : embedUrl.replace("autoplay=1", "autoplay=0")}
+            className="w-full h-full"
+            style={{ border: "none" }}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        );
+      }
+    }
+    
+    if (url.includes("facebook.com") || url.includes("fb.com")) {
+      return (
+        <iframe
+          src={getFacebookEmbedUrl(url)}
+          className="w-full h-full"
+          style={{ border: "none" }}
+          allow="autoplay; encrypted-media; fullscreen"
+          allowFullScreen
+        />
+      );
+    }
+    
+    return null;
+  };
 
   return (
     <section id="gallery" className="py-16 sm:py-20 lg:py-28 bg-muted/30">
@@ -57,12 +112,18 @@ export function GallerySection() {
                 <div className="aspect-square relative overflow-hidden">
                   {image.mediaType === "video" ? (
                     <>
-                      <video
-                        src={image.imageUrl}
-                        className="w-full h-full object-cover"
-                        muted
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center">
+                      {isEmbedUrl(image.imageUrl) ? (
+                        <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                          <Play className="h-12 w-12 text-white/70" />
+                        </div>
+                      ) : (
+                        <video
+                          src={image.imageUrl}
+                          className="w-full h-full object-cover"
+                          muted
+                        />
+                      )}
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center">
                           <Play className="h-6 w-6 text-white ml-1" />
                         </div>
@@ -102,29 +163,35 @@ export function GallerySection() {
             onClick={() => setSelectedImage(null)}
           >
             <button
-              className="absolute top-4 right-4 p-2 text-white bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+              className="absolute top-4 right-4 p-2 text-white bg-white/10 rounded-full hover:bg-white/20 transition-colors z-10"
               onClick={() => setSelectedImage(null)}
               data-testid="button-close-lightbox"
             >
               <X className="h-6 w-6" />
             </button>
             <div
-              className="max-w-4xl max-h-[90vh] relative"
+              className="max-w-4xl w-full max-h-[90vh] relative"
               onClick={(e) => e.stopPropagation()}
             >
               {selectedImage.mediaType === "video" ? (
-                <video
-                  src={selectedImage.imageUrl}
-                  className="max-w-full max-h-[80vh] rounded-lg"
-                  controls
-                  autoPlay
-                  playsInline
-                />
+                isEmbedUrl(selectedImage.imageUrl) ? (
+                  <div className="aspect-video w-full">
+                    {renderVideoEmbed(selectedImage.imageUrl, true)}
+                  </div>
+                ) : (
+                  <video
+                    src={selectedImage.imageUrl}
+                    className="max-w-full max-h-[80vh] rounded-lg mx-auto"
+                    controls
+                    autoPlay
+                    playsInline
+                  />
+                )
               ) : (
                 <img
                   src={selectedImage.imageUrl}
                   alt={selectedImage.title}
-                  className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                  className="max-w-full max-h-[80vh] object-contain rounded-lg mx-auto"
                 />
               )}
               <div className="mt-4 text-center text-white">
