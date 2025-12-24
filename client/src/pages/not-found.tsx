@@ -52,6 +52,17 @@ export default function NotFound() {
           <p className="text-xs text-muted-foreground/70 mt-1">
             ময়মনসিংহ সদর, ময়মনসিংহ
           </p>
+          <p className="text-xs text-muted-foreground/60 mt-3">
+            Developed by{" "}
+            <a 
+              href="https://maxtechbd.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              Maxtechbd.com
+            </a>
+          </p>
         </div>
       </div>
 

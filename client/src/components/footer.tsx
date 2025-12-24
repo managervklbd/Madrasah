@@ -155,8 +155,15 @@ export function Footer() {
               &copy; {currentYear} মহজমপুর হাফিজিয়া এতিমখানা মাদরাসা। সর্বস্বত্ব সংরক্ষিত।
             </p>
             <p className="flex items-center gap-1">
-              <Heart className="h-3 w-3 text-destructive" />
-              ভালোবাসায় তৈরি
+              Developed by{" "}
+              <a 
+                href="https://maxtechbd.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Maxtechbd.com
+              </a>
             </p>
           </div>
         </div>
