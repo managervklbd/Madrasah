@@ -15,11 +15,27 @@ function isEmbedUrl(url: string): boolean {
   );
 }
 
-function getYouTubeEmbedUrl(url: string): string | null {
+function getYouTubeVideoId(url: string): string | null {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
   if (match && match[2].length === 11) {
-    return `https://www.youtube.com/embed/${match[2]}?autoplay=1&controls=1`;
+    return match[2];
+  }
+  return null;
+}
+
+function getYouTubeEmbedUrl(url: string): string | null {
+  const videoId = getYouTubeVideoId(url);
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1`;
+  }
+  return null;
+}
+
+function getYouTubeThumbnail(url: string): string | null {
+  const videoId = getYouTubeVideoId(url);
+  if (videoId) {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   }
   return null;
 }
@@ -112,8 +128,17 @@ export function GallerySection() {
                 <div className="aspect-square relative overflow-hidden">
                   {image.mediaType === "video" ? (
                     <>
-                      {isEmbedUrl(image.imageUrl) ? (
-                        <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                      {(image.imageUrl.includes("youtube.com") || image.imageUrl.includes("youtu.be")) ? (
+                        <img
+                          src={getYouTubeThumbnail(image.imageUrl) || ""}
+                          alt={image.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://placehold.co/400x400/1f2937/ffffff?text=Video";
+                          }}
+                        />
+                      ) : isEmbedUrl(image.imageUrl) ? (
+                        <div className="w-full h-full bg-gradient-to-br from-blue-900 to-blue-950 flex items-center justify-center">
                           <Play className="h-12 w-12 text-white/70" />
                         </div>
                       ) : (
@@ -121,6 +146,11 @@ export function GallerySection() {
                           src={image.imageUrl}
                           className="w-full h-full object-cover"
                           muted
+                          preload="metadata"
+                          onLoadedData={(e) => {
+                            const video = e.target as HTMLVideoElement;
+                            video.currentTime = 0.1;
+                          }}
                         />
                       )}
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
