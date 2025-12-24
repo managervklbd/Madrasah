@@ -2,6 +2,7 @@ import { Route, Switch, Redirect, useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import AdminLogin from "./login";
 import AdminDashboard from "./dashboard";
+import BrandingManage from "./branding-manage";
 import HeroManage from "./hero-manage";
 import AboutManage from "./about-manage";
 import NoticesManage from "./notices-manage";
@@ -53,6 +54,11 @@ export default function AdminPages() {
     <Switch>
       <Route path="/admin/dashboard">
         <AdminDashboard onLogout={handleLogout} activeTab="dashboard" />
+      </Route>
+      <Route path="/admin/branding">
+        <AdminDashboard onLogout={handleLogout} activeTab="branding">
+          <BrandingManage />
+        </AdminDashboard>
       </Route>
       <Route path="/admin/hero">
         <AdminDashboard onLogout={handleLogout} activeTab="hero">

@@ -1,7 +1,7 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema } from "@shared/schema";
+import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema, brandingSchema } from "@shared/schema";
 
 // Admin credentials from environment variables with secure defaults
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
@@ -90,6 +90,15 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/branding", async (req, res) => {
+    try {
+      const branding = await storage.getBranding();
+      res.json(branding);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch branding" });
+    }
+  });
+
   // Protected endpoints (require authentication)
   app.post("/api/hero", requireAuth, async (req, res) => {
     try {
@@ -114,6 +123,19 @@ export async function registerRoutes(
       res.json(about);
     } catch (error) {
       res.status(500).json({ error: "Failed to update about data" });
+    }
+  });
+
+  app.post("/api/branding", requireAuth, async (req, res) => {
+    try {
+      const result = brandingSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: result.error.errors });
+      }
+      const branding = await storage.updateBranding(result.data);
+      res.json(branding);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update branding" });
     }
   });
 

@@ -34,8 +34,14 @@ export const aboutSchema = z.object({
   mission: z.string(),
 });
 
+export const brandingSchema = z.object({
+  siteName: z.string(),
+  logoUrl: z.string().optional(),
+});
+
 export type Hero = z.infer<typeof heroSchema>;
 export type About = z.infer<typeof aboutSchema>;
+export type Branding = z.infer<typeof brandingSchema>;
 
 export const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),

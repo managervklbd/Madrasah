@@ -1,4 +1,4 @@
-import { notices, siteSettings, type Hero, type About, type Notice, type InsertNotice } from "@shared/schema";
+import { notices, siteSettings, type Hero, type About, type Notice, type InsertNotice, type Branding } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -7,6 +7,8 @@ export interface IStorage {
   updateHero(hero: Hero): Promise<Hero>;
   getAbout(): Promise<About>;
   updateAbout(about: About): Promise<About>;
+  getBranding(): Promise<Branding>;
+  updateBranding(branding: Branding): Promise<Branding>;
   getNotices(): Promise<Notice[]>;
   createNotice(notice: InsertNotice): Promise<Notice>;
   updateNotice(id: number, notice: InsertNotice): Promise<Notice | null>;
@@ -24,6 +26,11 @@ const DEFAULT_HERO: Hero = {
 const DEFAULT_ABOUT: About = {
   text: "মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা ১৯৯০ সাল থেকে এতিম ও সাধারণ শিক্ষার্থীদের হিফজুল কুরআন ও নৈতিক শিক্ষা প্রদান করে আসছে। আমাদের লক্ষ্য হলো প্রতিটি শিক্ষার্থীকে আদর্শ মানুষ ও সত্যিকারের মুসলিম হিসেবে গড়ে তোলা। এখানে শিক্ষার্থীরা পবিত্র কুরআন হিফজ করার পাশাপাশি ইসলামী আদব-কায়দা, নৈতিকতা এবং সমাজে কীভাবে একজন আদর্শ মানুষ হিসেবে বসবাস করতে হয় তা শেখে।",
   mission: "দ্বীনি শিক্ষার আলোয় আলোকিত করে প্রতিটি শিক্ষার্থীকে সমাজের জন্য উপযোগী, আদর্শ ও নৈতিক মানুষ হিসেবে গড়ে তোলা। আমরা বিশ্বাস করি প্রতিটি শিশুই আল্লাহর আমানত এবং তাদের সঠিক শিক্ষা ও পরিচর্যার মাধ্যমে উম্মাহর জন্য অবদান রাখতে সক্ষম।",
+};
+
+const DEFAULT_BRANDING: Branding = {
+  siteName: "মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা",
+  logoUrl: "",
 };
 
 const DEFAULT_NOTICES: InsertNotice[] = [
@@ -103,6 +110,22 @@ export class DatabaseStorage implements IStorage {
       await db.insert(siteSettings).values({ key: "about", value: JSON.stringify(about) });
     }
     return about;
+  }
+
+  async getBranding(): Promise<Branding> {
+    const [setting] = await db.select().from(siteSettings).where(eq(siteSettings.key, "branding"));
+    if (!setting) return DEFAULT_BRANDING;
+    return JSON.parse(setting.value) as Branding;
+  }
+
+  async updateBranding(branding: Branding): Promise<Branding> {
+    const [existing] = await db.select().from(siteSettings).where(eq(siteSettings.key, "branding"));
+    if (existing) {
+      await db.update(siteSettings).set({ value: JSON.stringify(branding) }).where(eq(siteSettings.key, "branding"));
+    } else {
+      await db.insert(siteSettings).values({ key: "branding", value: JSON.stringify(branding) });
+    }
+    return branding;
   }
 
   async getNotices(): Promise<Notice[]> {

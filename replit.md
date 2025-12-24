@@ -29,6 +29,7 @@ client/                 # React frontend
         hero-manage.tsx # Hero section editor
         about-manage.tsx # About section editor
         notices-manage.tsx # Notices CRUD
+        branding-manage.tsx # Site name & logo settings
 server/                 # Express backend
   routes.ts            # API endpoints
   storage.ts           # Database storage layer
@@ -44,14 +45,19 @@ shared/
 - **Routing:** Wouter
 
 ## API Endpoints
+- `GET /api/branding` - Get site branding (name, logo URL)
+- `POST /api/branding` - Update site branding (protected)
 - `GET /api/hero` - Get hero section data
-- `POST /api/hero` - Update hero section
+- `POST /api/hero` - Update hero section (protected)
 - `GET /api/about` - Get about section data
-- `POST /api/about` - Update about section
+- `POST /api/about` - Update about section (protected)
 - `GET /api/notices` - Get all notices
-- `POST /api/notices` - Create a notice
-- `PUT /api/notices/:id` - Update a notice
-- `DELETE /api/notices/:id` - Delete a notice
+- `POST /api/notices` - Create a notice (protected)
+- `PUT /api/notices/:id` - Update a notice (protected)
+- `DELETE /api/notices/:id` - Delete a notice (protected)
+- `POST /api/auth/login` - Admin login
+- `POST /api/auth/logout` - Admin logout
+- `GET /api/auth/check` - Check authentication status
 
 ## Admin Access
 - **URL:** /admin
@@ -65,4 +71,6 @@ shared/
 - Responsive design
 
 ## Recent Changes
+- December 2024: Added branding management (logo & site name) to admin dashboard
+- December 2024: Added server-side session authentication for security
 - December 2024: Initial implementation with PostgreSQL database

@@ -2,13 +2,19 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookOpen, Users, Heart } from "lucide-react";
-import logoImage from "@assets/image_1766561812238.png";
-import type { Hero } from "@shared/schema";
+import defaultLogo from "@assets/image_1766561812238.png";
+import type { Hero, Branding } from "@shared/schema";
 
 export function HeroSection() {
   const { data: hero, isLoading } = useQuery<Hero>({
     queryKey: ["/api/hero"],
   });
+
+  const { data: branding } = useQuery<Branding>({
+    queryKey: ["/api/branding"],
+  });
+
+  const logoSrc = branding?.logoUrl || defaultLogo;
 
   const scrollToContact = () => {
     const element = document.getElementById("contact");
@@ -29,10 +35,13 @@ export function HeroSection() {
           <div className="relative">
             <div className="absolute inset-0 bg-white/20 rounded-full blur-xl scale-110" />
             <img
-              src={logoImage}
+              src={logoSrc}
               alt="মাদ্রাসা লোগো"
               className="relative h-32 lg:h-40 w-auto drop-shadow-2xl"
               data-testid="img-hero-logo"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = defaultLogo;
+              }}
             />
           </div>
         </div>

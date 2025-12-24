@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Menu, X, Phone, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import logoImage from "@assets/image_1766561812238.png";
+import defaultLogo from "@assets/image_1766561812238.png";
+import type { Branding } from "@shared/schema";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location] = useLocation();
+
+  const { data: branding } = useQuery<Branding>({
+    queryKey: ["/api/branding"],
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +42,11 @@ export function Navbar() {
     }
   };
 
+  const logoSrc = branding?.logoUrl || defaultLogo;
+  const siteNameParts = (branding?.siteName || "মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা").split(" ");
+  const firstLine = siteNameParts.slice(0, 2).join(" ");
+  const secondLine = siteNameParts.slice(2).join(" ");
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -48,17 +59,20 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link href="/" className="flex items-center gap-3">
             <img
-              src={logoImage}
+              src={logoSrc}
               alt="মাদ্রাসা লোগো"
               className="h-12 lg:h-14 w-auto"
               data-testid="img-logo"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = defaultLogo;
+              }}
             />
             <div className="hidden sm:block">
               <h1 className={`text-sm lg:text-base font-semibold leading-tight ${isScrolled ? "" : "text-white drop-shadow-lg"}`}>
-                মহাজামপুর হাফিজিয়া
+                {firstLine}
               </h1>
               <p className={`text-xs lg:text-sm ${isScrolled ? "text-muted-foreground" : "text-white/80 drop-shadow"}`}>
-                এতিমখানা মাদ্রাসা
+                {secondLine}
               </p>
             </div>
           </Link>
