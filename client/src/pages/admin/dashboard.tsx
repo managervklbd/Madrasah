@@ -16,6 +16,7 @@ import {
   Home,
   Palette,
   Images,
+  SlidersHorizontal,
 } from "lucide-react";
 import logoImage from "@assets/image_1766561812238.png";
 import type { Notice } from "@shared/schema";
@@ -42,6 +43,7 @@ export default function AdminDashboard({
     { id: "dashboard", label: "ড্যাশবোর্ড", icon: LayoutDashboard, href: "/admin/dashboard" },
     { id: "branding", label: "ব্র্যান্ডিং", icon: Palette, href: "/admin/branding" },
     { id: "hero", label: "হিরো সেকশন", icon: Image, href: "/admin/hero" },
+    { id: "hero-slides", label: "হিরো স্লাইডার", icon: SlidersHorizontal, href: "/admin/hero-slides" },
     { id: "about", label: "আমাদের সম্পর্কে", icon: FileText, href: "/admin/about" },
     { id: "notices", label: "নোটিশ সমূহ", icon: Bell, href: "/admin/notices" },
     { id: "gallery", label: "ফটো গ্যালারি", icon: Images, href: "/admin/gallery" },

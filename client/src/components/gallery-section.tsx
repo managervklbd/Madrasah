@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ImageIcon, X } from "lucide-react";
+import { ImageIcon, X, Play, Star } from "lucide-react";
 import { useState } from "react";
 import type { GalleryImage } from "@shared/schema";
 
@@ -12,12 +12,16 @@ export function GallerySection() {
 
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
+  const featuredItems = images?.filter((img) => img.isFeatured === "true") || [];
+  const regularItems = images?.filter((img) => img.isFeatured !== "true") || [];
+  const sortedItems = [...featuredItems, ...regularItems];
+
   return (
     <section id="gallery" className="py-16 sm:py-20 lg:py-28 bg-muted/30">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12 sm:mb-16">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
-            ফটো গ্যালারি
+            ফটো ও ভিডিও গ্যালারি
           </span>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">
             মাদরাসার কিছু মুহূর্ত
@@ -35,15 +39,15 @@ export function GallerySection() {
           <Card className="max-w-md mx-auto text-center">
             <CardContent className="py-12">
               <ImageIcon className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">কোন ছবি নেই</h3>
+              <h3 className="text-lg font-semibold mb-2">কোন মিডিয়া নেই</h3>
               <p className="text-muted-foreground">
-                শীঘ্রই মাদরাসার ছবি যোগ করা হবে।
+                শীঘ্রই মাদরাসার ছবি ও ভিডিও যোগ করা হবে।
               </p>
             </CardContent>
           </Card>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {images.map((image) => (
+            {sortedItems.map((image) => (
               <Card
                 key={image.id}
                 className="group overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
@@ -51,14 +55,34 @@ export function GallerySection() {
                 data-testid={`card-gallery-${image.id}`}
               >
                 <div className="aspect-square relative overflow-hidden">
-                  <img
-                    src={image.imageUrl}
-                    alt={image.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://placehold.co/400x400/0d9488/ffffff?text=ছবি";
-                    }}
-                  />
+                  {image.mediaType === "video" ? (
+                    <>
+                      <video
+                        src={image.imageUrl}
+                        className="w-full h-full object-cover"
+                        muted
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center">
+                          <Play className="h-6 w-6 text-white ml-1" />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <img
+                      src={image.imageUrl}
+                      alt={image.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://placehold.co/400x400/0d9488/ffffff?text=ছবি";
+                      }}
+                    />
+                  )}
+                  {image.isFeatured === "true" && (
+                    <div className="absolute top-2 right-2">
+                      <Star className="h-5 w-5 text-yellow-400 fill-yellow-400 drop-shadow-lg" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform">
                     <p className="font-semibold text-sm line-clamp-1">{image.title}</p>
@@ -88,11 +112,21 @@ export function GallerySection() {
               className="max-w-4xl max-h-[90vh] relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
-                src={selectedImage.imageUrl}
-                alt={selectedImage.title}
-                className="max-w-full max-h-[80vh] object-contain rounded-lg"
-              />
+              {selectedImage.mediaType === "video" ? (
+                <video
+                  src={selectedImage.imageUrl}
+                  className="max-w-full max-h-[80vh] rounded-lg"
+                  controls
+                  autoPlay
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={selectedImage.imageUrl}
+                  alt={selectedImage.title}
+                  className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                />
+              )}
               <div className="mt-4 text-center text-white">
                 <h3 className="font-semibold text-lg">{selectedImage.title}</h3>
                 {selectedImage.caption && (
