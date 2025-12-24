@@ -1,0 +1,152 @@
+Create a full-stack React + Node.js project in Replit
+for a Bangladeshi Islamic madrasa website with a dynamic dashboard.
+
+Project Name:
+Mahajampur Hafizia Etimkhana Madrasah
+
+Location:
+Mahajampur, Shamvugonj, Bangladesh
+
+Contact:
+Phone: 01728-825819
+Facebook: https://facebook.com/mhem1990
+
+====================================
+TECH STACK
+====================================
+Frontend:
+- React with Vite
+- React Router
+- Fetch API
+- Plain CSS
+
+Backend:
+- Node.js
+- Express.js
+- JSON file as database (db.json)
+- CORS enabled
+
+====================================
+PUBLIC WEBSITE (DYNAMIC)
+====================================
+
+1) HERO SECTION (Dynamic)
+Fields:
+- Madrasa Name
+- Slogan
+- Short description
+- Button text
+Data must come from backend API.
+
+2) ABOUT US SECTION (Dynamic)
+Fields:
+- About description (paragraph)
+- Mission text
+Editable from dashboard.
+
+3) NOTICE SECTION (Dynamic)
+Fields:
+- Notice title
+- Notice description
+- Date
+Features:
+- Show latest notices first
+- Admin can add/edit/delete notices
+
+====================================
+ADMIN DASHBOARD
+====================================
+
+Dashboard Route:
+- /admin
+
+Login:
+- Simple login (username: admin, password: admin123)
+- No JWT required (local state auth)
+
+Dashboard Pages:
+1) Dashboard Home
+2) Manage Hero Section
+   - Edit madrasa name
+   - Edit slogan
+   - Edit description
+3) Manage About Us
+   - Edit about text
+4) Manage Notices
+   - Add notice
+   - Edit notice
+   - Delete notice
+
+====================================
+API ENDPOINTS
+====================================
+GET /api/hero
+POST /api/hero
+
+GET /api/about
+POST /api/about
+
+GET /api/notices
+POST /api/notices
+PUT /api/notices/:id
+DELETE /api/notices/:id
+
+====================================
+FOLDER STRUCTURE
+====================================
+
+/client
+  /src
+    /pages
+      Home.jsx
+      Admin.jsx
+    /components
+      Hero.jsx
+      About.jsx
+      Notices.jsx
+      Navbar.jsx
+    App.jsx
+    main.jsx
+
+/server
+  index.js
+  db.json
+
+====================================
+DB.JSON STRUCTURE
+====================================
+
+{
+  "hero": {
+    "name": "Mahajampur Hafizia Etimkhana Madrasah",
+    "slogan": "দ্বীনি শিক্ষায় আদর্শ মানুষ গড়ার প্রত্যয়ে",
+    "description": "একটি অরাজনৈতিক ও অলাভজনক হিফজ মাদ্রাসা ও এতিমখানা"
+  },
+  "about": {
+    "text": "এখানে এতিম ও সাধারণ শিক্ষার্থীদের হিফজুল কুরআন ও নৈতিক শিক্ষা প্রদান করা হয়।"
+  },
+  "notices": [
+    {
+      "id": 1,
+      "title": "ভর্তি বিজ্ঞপ্তি",
+      "description": "নতুন ভর্তি কার্যক্রম শুরু হয়েছে",
+      "date": "2025-01-01"
+    }
+  ]
+}
+
+====================================
+REQUIREMENTS
+====================================
+- All public content must load from backend APIs
+- Admin dashboard changes must instantly reflect on website
+- Clean UI
+- Bangla UTF-8 support
+- Add comments in code
+- Project must run directly in Replit
+
+====================================
+OUTPUT
+====================================
+Generate full frontend + backend code,
+ready to run without extra configuration.
