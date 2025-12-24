@@ -1,4 +1,4 @@
-import { notices, siteSettings, type Hero, type About, type Notice, type InsertNotice, type Branding } from "@shared/schema";
+import { notices, siteSettings, galleryImages, type Hero, type About, type Notice, type InsertNotice, type Branding, type GalleryImage, type InsertGalleryImage } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -13,6 +13,10 @@ export interface IStorage {
   createNotice(notice: InsertNotice): Promise<Notice>;
   updateNotice(id: number, notice: InsertNotice): Promise<Notice | null>;
   deleteNotice(id: number): Promise<boolean>;
+  getGalleryImages(): Promise<GalleryImage[]>;
+  createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage>;
+  updateGalleryImage(id: number, image: InsertGalleryImage): Promise<GalleryImage | null>;
+  deleteGalleryImage(id: number): Promise<boolean>;
   initializeDefaults(): Promise<void>;
 }
 
@@ -144,6 +148,25 @@ export class DatabaseStorage implements IStorage {
 
   async deleteNotice(id: number): Promise<boolean> {
     const result = await db.delete(notices).where(eq(notices.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getGalleryImages(): Promise<GalleryImage[]> {
+    return await db.select().from(galleryImages);
+  }
+
+  async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
+    const [newImage] = await db.insert(galleryImages).values(image).returning();
+    return newImage;
+  }
+
+  async updateGalleryImage(id: number, image: InsertGalleryImage): Promise<GalleryImage | null> {
+    const [updated] = await db.update(galleryImages).set(image).where(eq(galleryImages.id, id)).returning();
+    return updated || null;
+  }
+
+  async deleteGalleryImage(id: number): Promise<boolean> {
+    const result = await db.delete(galleryImages).where(eq(galleryImages.id, id)).returning();
     return result.length > 0;
   }
 }

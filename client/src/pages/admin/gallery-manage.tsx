@@ -1,0 +1,313 @@
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Plus, Pencil, Trash2, Loader2, ImageIcon } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { queryClient, apiRequest } from "@/lib/queryClient";
+import { insertGalleryImageSchema, type GalleryImage, type InsertGalleryImage } from "@shared/schema";
+import { useState } from "react";
+
+export default function GalleryManage() {
+  const { toast } = useToast();
+  const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
+  const [deletingImage, setDeletingImage] = useState<GalleryImage | null>(null);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
+  const { data: images, isLoading } = useQuery<GalleryImage[]>({
+    queryKey: ["/api/gallery"],
+  });
+
+  const form = useForm<InsertGalleryImage>({
+    resolver: zodResolver(insertGalleryImageSchema),
+    defaultValues: {
+      title: "",
+      imageUrl: "",
+      caption: "",
+    },
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data: InsertGalleryImage) => apiRequest("POST", "/api/gallery", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
+      toast({ title: "সফল!", description: "নতুন ছবি যোগ করা হয়েছে" });
+      form.reset();
+      setIsAddDialogOpen(false);
+    },
+    onError: () => {
+      toast({ title: "ত্রুটি!", description: "ছবি যোগ করা যায়নি", variant: "destructive" });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (data: { id: number; image: InsertGalleryImage }) =>
+      apiRequest("PUT", `/api/gallery/${data.id}`, data.image),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
+      toast({ title: "সফল!", description: "ছবি আপডেট করা হয়েছে" });
+      setEditingImage(null);
+      form.reset();
+    },
+    onError: () => {
+      toast({ title: "ত্রুটি!", description: "ছবি আপডেট করা যায়নি", variant: "destructive" });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => apiRequest("DELETE", `/api/gallery/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
+      toast({ title: "সফল!", description: "ছবি মুছে ফেলা হয়েছে" });
+      setDeletingImage(null);
+    },
+    onError: () => {
+      toast({ title: "ত্রুটি!", description: "ছবি মুছে ফেলা যায়নি", variant: "destructive" });
+    },
+  });
+
+  const onSubmit = (data: InsertGalleryImage) => {
+    if (editingImage) {
+      updateMutation.mutate({ id: editingImage.id, image: data });
+    } else {
+      createMutation.mutate(data);
+    }
+  };
+
+  const handleEdit = (image: GalleryImage) => {
+    setEditingImage(image);
+    form.reset({
+      title: image.title,
+      imageUrl: image.imageUrl,
+      caption: image.caption || "",
+    });
+  };
+
+  const handleAddNew = () => {
+    setEditingImage(null);
+    form.reset({
+      title: "",
+      imageUrl: "",
+      caption: "",
+    });
+    setIsAddDialogOpen(true);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="aspect-square rounded-lg" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const ImageForm = () => (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ছবির শিরোনাম</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="ছবির শিরোনাম লিখুন" data-testid="input-gallery-title" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="imageUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ছবির URL</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="https://example.com/image.jpg" data-testid="input-gallery-url" />
+              </FormControl>
+              <FormDescription>ছবির সরাসরি লিঙ্ক দিন</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="caption"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ক্যাপশন (ঐচ্ছিক)</FormLabel>
+              <FormControl>
+                <Input {...field} value={field.value || ""} placeholder="ছবির বিবরণ" data-testid="input-gallery-caption" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={createMutation.isPending || updateMutation.isPending}
+          data-testid="button-save-gallery"
+        >
+          {(createMutation.isPending || updateMutation.isPending) ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              সংরক্ষণ হচ্ছে...
+            </>
+          ) : editingImage ? (
+            "আপডেট করুন"
+          ) : (
+            "যোগ করুন"
+          )}
+        </Button>
+      </form>
+    </Form>
+  );
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">গ্যালারি ম্যানেজমেন্ট</h1>
+          <p className="text-muted-foreground">মাদরাসার ছবি যোগ, সম্পাদনা ও মুছুন</p>
+        </div>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={handleAddNew} data-testid="button-add-gallery">
+              <Plus className="h-4 w-4 mr-2" />
+              নতুন ছবি যোগ করুন
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>নতুন ছবি যোগ করুন</DialogTitle>
+              <DialogDescription>গ্যালারিতে নতুন ছবি যোগ করতে নিচের ফর্ম পূরণ করুন</DialogDescription>
+            </DialogHeader>
+            <ImageForm />
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {!images || images.length === 0 ? (
+        <Card className="text-center py-12">
+          <CardContent>
+            <ImageIcon className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">কোন ছবি নেই</h3>
+            <p className="text-muted-foreground mb-4">গ্যালারিতে এখনো কোন ছবি যোগ করা হয়নি</p>
+            <Button onClick={handleAddNew}>
+              <Plus className="h-4 w-4 mr-2" />
+              প্রথম ছবি যোগ করুন
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {images.map((image) => (
+            <Card key={image.id} className="overflow-hidden group" data-testid={`card-admin-gallery-${image.id}`}>
+              <div className="aspect-square relative overflow-hidden bg-muted">
+                <img
+                  src={image.imageUrl}
+                  alt={image.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://placehold.co/400x400/0d9488/ffffff?text=ছবি";
+                  }}
+                />
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button size="icon" variant="secondary" onClick={() => handleEdit(image)} data-testid={`button-edit-gallery-${image.id}`}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>ছবি সম্পাদনা করুন</DialogTitle>
+                        <DialogDescription>ছবির তথ্য আপডেট করুন</DialogDescription>
+                      </DialogHeader>
+                      <ImageForm />
+                    </DialogContent>
+                  </Dialog>
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    onClick={() => setDeletingImage(image)}
+                    data-testid={`button-delete-gallery-${image.id}`}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <CardContent className="p-3">
+                <p className="font-medium text-sm line-clamp-1">{image.title}</p>
+                {image.caption && (
+                  <p className="text-xs text-muted-foreground line-clamp-1">{image.caption}</p>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      <AlertDialog open={!!deletingImage} onOpenChange={() => setDeletingImage(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>ছবি মুছে ফেলতে চান?</AlertDialogTitle>
+            <AlertDialogDescription>
+              "{deletingImage?.title}" ছবিটি মুছে ফেলা হবে। এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>বাতিল</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deletingImage && deleteMutation.mutate(deletingImage.id)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleteMutation.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "মুছে ফেলুন"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}

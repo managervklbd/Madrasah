@@ -6,6 +6,7 @@ import BrandingManage from "./branding-manage";
 import HeroManage from "./hero-manage";
 import AboutManage from "./about-manage";
 import NoticesManage from "./notices-manage";
+import GalleryManage from "./gallery-manage";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
@@ -73,6 +74,11 @@ export default function AdminPages() {
       <Route path="/admin/notices">
         <AdminDashboard onLogout={handleLogout} activeTab="notices">
           <NoticesManage />
+        </AdminDashboard>
+      </Route>
+      <Route path="/admin/gallery">
+        <AdminDashboard onLogout={handleLogout} activeTab="gallery">
+          <GalleryManage />
         </AdminDashboard>
       </Route>
       <Route path="/admin">

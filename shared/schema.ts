@@ -21,6 +21,18 @@ export const insertNoticeSchema = createInsertSchema(notices).omit({ id: true })
 export type Notice = typeof notices.$inferSelect;
 export type InsertNotice = z.infer<typeof insertNoticeSchema>;
 
+// Gallery images table
+export const galleryImages = pgTable("gallery_images", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  imageUrl: text("image_url").notNull(),
+  caption: text("caption"),
+});
+
+export const insertGalleryImageSchema = createInsertSchema(galleryImages).omit({ id: true });
+export type GalleryImage = typeof galleryImages.$inferSelect;
+export type InsertGalleryImage = z.infer<typeof insertGalleryImageSchema>;
+
 // Zod schemas for validation
 export const heroSchema = z.object({
   name: z.string(),

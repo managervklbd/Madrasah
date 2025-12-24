@@ -1,7 +1,7 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema, brandingSchema } from "@shared/schema";
+import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema, brandingSchema, insertGalleryImageSchema } from "@shared/schema";
 
 // Admin credentials from environment variables with secure defaults
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
@@ -188,6 +188,68 @@ export async function registerRoutes(
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete notice" });
+    }
+  });
+
+  // Gallery endpoints
+  app.get("/api/gallery", async (req, res) => {
+    try {
+      const images = await storage.getGalleryImages();
+      res.json(images);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch gallery images" });
+    }
+  });
+
+  app.post("/api/gallery", requireAuth, async (req, res) => {
+    try {
+      const result = insertGalleryImageSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: result.error.errors });
+      }
+      const image = await storage.createGalleryImage(result.data);
+      res.status(201).json(image);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create gallery image" });
+    }
+  });
+
+  app.put("/api/gallery/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid image ID" });
+      }
+
+      const result = insertGalleryImageSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: result.error.errors });
+      }
+
+      const image = await storage.updateGalleryImage(id, result.data);
+      if (!image) {
+        return res.status(404).json({ error: "Image not found" });
+      }
+      res.json(image);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update gallery image" });
+    }
+  });
+
+  app.delete("/api/gallery/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid image ID" });
+      }
+
+      const deleted = await storage.deleteGalleryImage(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Image not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete gallery image" });
     }
   });
 
