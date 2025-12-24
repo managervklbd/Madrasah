@@ -1,0 +1,115 @@
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { BookOpen, Users, Heart } from "lucide-react";
+import logoImage from "@assets/image_1766561812238.png";
+import type { Hero } from "@shared/schema";
+
+export function HeroSection() {
+  const { data: hero, isLoading } = useQuery<Hero>({
+    queryKey: ["/api/hero"],
+  });
+
+  const scrollToContact = () => {
+    const element = document.getElementById("contact");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1a6b5c] via-[#1a7a6d] to-[#0d4a40]" />
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-50" />
+      
+      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center py-24 pt-32">
+        <div className="mb-8 flex justify-center">
+          <div className="relative">
+            <div className="absolute inset-0 bg-white/20 rounded-full blur-xl scale-110" />
+            <img
+              src={logoImage}
+              alt="মাদ্রাসা লোগো"
+              className="relative h-32 lg:h-40 w-auto drop-shadow-2xl"
+              data-testid="img-hero-logo"
+            />
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-12 w-3/4 mx-auto bg-white/20" />
+            <Skeleton className="h-8 w-2/3 mx-auto bg-white/20" />
+            <Skeleton className="h-6 w-1/2 mx-auto bg-white/20" />
+          </div>
+        ) : (
+          <>
+            <h1
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 drop-shadow-lg leading-tight"
+              data-testid="text-hero-name"
+            >
+              {hero?.name || "মহাজামপুর হাফিজিয়া এতিমখানা মাদ্রাসা"}
+            </h1>
+            <p
+              className="text-xl sm:text-2xl lg:text-3xl text-orange-300 font-semibold mb-6 drop-shadow"
+              data-testid="text-hero-slogan"
+            >
+              {hero?.slogan || "দ্বীনি শিক্ষায় আদর্শ মানুষ গড়ার প্রত্যয়ে"}
+            </p>
+            <p
+              className="text-base sm:text-lg lg:text-xl text-white/90 mb-10 max-w-2xl mx-auto drop-shadow"
+              data-testid="text-hero-description"
+            >
+              {hero?.description ||
+                "একটি অরাজনৈতিক ও অলাভজনক হিফজ মাদ্রাসা ও এতিমখানা"}
+            </p>
+          </>
+        )}
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <Button
+            size="lg"
+            className="bg-orange-500 hover:bg-orange-600 text-white border-orange-600 text-base lg:text-lg px-8"
+            onClick={scrollToContact}
+            data-testid="button-hero-cta"
+          >
+            {hero?.buttonText || "যোগাযোগ করুন"}
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/20 text-base lg:text-lg px-8"
+            onClick={() => {
+              const element = document.getElementById("about");
+              if (element) element.scrollIntoView({ behavior: "smooth" });
+            }}
+            data-testid="button-hero-learn-more"
+          >
+            আরও জানুন
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-white/20">
+            <BookOpen className="h-8 w-8 text-orange-300 mx-auto mb-3" />
+            <h3 className="text-white font-semibold text-lg mb-1">হিফজুল কুরআন</h3>
+            <p className="text-white/70 text-sm">পবিত্র কুরআন মুখস্থ শিক্ষা</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-white/20">
+            <Users className="h-8 w-8 text-orange-300 mx-auto mb-3" />
+            <h3 className="text-white font-semibold text-lg mb-1">নৈতিক শিক্ষা</h3>
+            <p className="text-white/70 text-sm">চরিত্র গঠন ও আদর্শ জীবন</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-white/20">
+            <Heart className="h-8 w-8 text-orange-300 mx-auto mb-3" />
+            <h3 className="text-white font-semibold text-lg mb-1">এতিম সেবা</h3>
+            <p className="text-white/70 text-sm">এতিমদের লালন-পালন ও শিক্ষা</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
+    </section>
+  );
+}
