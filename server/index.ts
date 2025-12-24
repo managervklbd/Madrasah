@@ -16,6 +16,8 @@ declare module "http" {
 declare module "express-session" {
   interface SessionData {
     isAdmin?: boolean;
+    userId?: number;
+    username?: string;
   }
 }
 

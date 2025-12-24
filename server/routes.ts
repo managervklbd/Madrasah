@@ -8,9 +8,6 @@ import { uploadToCloudinary } from "./cloudinary";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Admin credentials from environment variables with secure defaults
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
 function requireAuth(req: Request, res: Response, next: NextFunction) {
   if (req.session?.isAdmin) {
@@ -68,8 +65,12 @@ export async function registerRoutes(
       }
 
       const { username, password } = result.data;
-      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      const user = await storage.validateUserPassword(username, password);
+      
+      if (user) {
         req.session.isAdmin = true;
+        req.session.userId = user.id;
+        req.session.username = user.username;
         res.json({ success: true, message: "Login successful" });
       } else {
         res.status(401).json({ error: "Invalid username or password" });

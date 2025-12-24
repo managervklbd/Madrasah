@@ -1,6 +1,7 @@
-import { notices, siteSettings, galleryImages, heroSlides, type Hero, type About, type Notice, type InsertNotice, type Branding, type GalleryImage, type InsertGalleryImage, type HeroSlide, type InsertHeroSlide } from "@shared/schema";
+import { notices, siteSettings, galleryImages, heroSlides, users, type Hero, type About, type Notice, type InsertNotice, type Branding, type GalleryImage, type InsertGalleryImage, type HeroSlide, type InsertHeroSlide, type User, type InsertUser } from "@shared/schema";
 import { db } from "./db";
 import { eq, asc } from "drizzle-orm";
+import bcrypt from "bcryptjs";
 
 export interface IStorage {
   getHero(): Promise<Hero>;
@@ -21,6 +22,10 @@ export interface IStorage {
   createHeroSlide(slide: InsertHeroSlide): Promise<HeroSlide>;
   updateHeroSlide(id: number, slide: InsertHeroSlide): Promise<HeroSlide | null>;
   deleteHeroSlide(id: number): Promise<boolean>;
+  getUserByUsername(username: string): Promise<User | null>;
+  validateUserPassword(username: string, password: string): Promise<User | null>;
+  createUser(user: InsertUser): Promise<User>;
+  updateUserPassword(id: number, newPassword: string): Promise<boolean>;
   initializeDefaults(): Promise<void>;
 }
 
@@ -190,6 +195,34 @@ export class DatabaseStorage implements IStorage {
 
   async deleteHeroSlide(id: number): Promise<boolean> {
     const result = await db.delete(heroSlides).where(eq(heroSlides.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getUserByUsername(username: string): Promise<User | null> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || null;
+  }
+
+  async validateUserPassword(username: string, password: string): Promise<User | null> {
+    const user = await this.getUserByUsername(username);
+    if (!user) return null;
+    
+    const isValid = await bcrypt.compare(password, user.password);
+    return isValid ? user : null;
+  }
+
+  async createUser(user: InsertUser): Promise<User> {
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const [newUser] = await db.insert(users).values({
+      ...user,
+      password: hashedPassword,
+    }).returning();
+    return newUser;
+  }
+
+  async updateUserPassword(id: number, newPassword: string): Promise<boolean> {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const result = await db.update(users).set({ password: hashedPassword }).where(eq(users.id, id)).returning();
     return result.length > 0;
   }
 }
