@@ -2,7 +2,6 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema, brandingSchema, insertGalleryImageSchema, insertHeroSlideSchema } from "@shared/schema";
-import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import multer from "multer";
 import { uploadToCloudinary } from "./cloudinary";
 
@@ -29,9 +28,6 @@ export async function registerRoutes(
   } catch (error) {
     console.log("Database initialization skipped or already done");
   }
-
-  // Register object storage routes for file uploads (legacy)
-  registerObjectStorageRoutes(app);
 
   // Cloudinary upload endpoint
   app.post("/api/upload", requireAuth, upload.single("file"), async (req, res) => {
