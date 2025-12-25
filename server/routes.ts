@@ -90,6 +90,45 @@ export async function registerRoutes(
     res.json({ isAuthenticated: !!req.session?.isAdmin });
   });
 
+  // Change password endpoint
+  app.post("/api/auth/change-password", requireAuth, async (req, res) => {
+    try {
+      const { currentPassword, newPassword } = req.body;
+      
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ error: "Current and new password required" });
+      }
+      
+      if (newPassword.length < 6) {
+        return res.status(400).json({ error: "New password must be at least 6 characters" });
+      }
+      
+      const userId = req.session.userId;
+      const username = req.session.username;
+      
+      if (!userId || !username) {
+        return res.status(401).json({ error: "Session expired, please login again" });
+      }
+      
+      // Verify current password
+      const user = await storage.validateUserPassword(username, currentPassword);
+      if (!user) {
+        return res.status(401).json({ error: "Current password is incorrect" });
+      }
+      
+      // Update password
+      const updated = await storage.updateUserPassword(userId, newPassword);
+      if (updated) {
+        res.json({ success: true, message: "Password changed successfully" });
+      } else {
+        res.status(500).json({ error: "Failed to update password" });
+      }
+    } catch (error) {
+      console.error("Password change error:", error);
+      res.status(500).json({ error: "Failed to change password" });
+    }
+  });
+
   // Public endpoints
   app.get("/api/hero", async (req, res) => {
     try {

@@ -16,6 +16,7 @@ import {
   Palette,
   Images,
   SlidersHorizontal,
+  Lock,
 } from "lucide-react";
 import logoImage from "@assets/image_1766561812238.png";
 import type { Notice } from "@shared/schema";
@@ -69,6 +70,12 @@ export default function AdminDashboard({
       label: "ফটো গ্যালারি",
       icon: Images,
       href: "/admin/gallery",
+    },
+    {
+      id: "password",
+      label: "পাসওয়ার্ড পরিবর্তন",
+      icon: Lock,
+      href: "/admin/password",
     },
   ];
 

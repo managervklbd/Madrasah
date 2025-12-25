@@ -7,6 +7,7 @@ import HeroSlidesManage from "./hero-slides-manage";
 import AboutManage from "./about-manage";
 import NoticesManage from "./notices-manage";
 import GalleryManage from "./gallery-manage";
+import PasswordChange from "./password-change";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
@@ -79,6 +80,11 @@ export default function AdminPages() {
       <Route path="/admin/gallery">
         <AdminDashboard onLogout={handleLogout} activeTab="gallery">
           <GalleryManage />
+        </AdminDashboard>
+      </Route>
+      <Route path="/admin/password">
+        <AdminDashboard onLogout={handleLogout} activeTab="password">
+          <PasswordChange />
         </AdminDashboard>
       </Route>
       <Route path="/admin">
