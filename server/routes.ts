@@ -5,7 +5,12 @@ import { heroSchema, aboutSchema, insertNoticeSchema, loginSchema, brandingSchem
 import multer from "multer";
 import { uploadToCloudinary } from "./cloudinary";
 
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit
+  }
+});
 
 
 function requireAuth(req: Request, res: Response, next: NextFunction) {
