@@ -94,18 +94,17 @@ export default function PasswordChange() {
                   type={showCurrentPassword ? "text" : "password"}
                   {...register("currentPassword")}
                   placeholder="বর্তমান পাসওয়ার্ড লিখুন"
+                  className="pr-10"
                   data-testid="input-current-password"
                 />
-                <Button
+                <button
                   type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-0 top-0"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                   data-testid="button-toggle-current-password"
                 >
                   {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </Button>
+                </button>
               </div>
               {errors.currentPassword && (
                 <p className="text-sm text-destructive">{errors.currentPassword.message}</p>
@@ -120,18 +119,17 @@ export default function PasswordChange() {
                   type={showNewPassword ? "text" : "password"}
                   {...register("newPassword")}
                   placeholder="নতুন পাসওয়ার্ড লিখুন (কমপক্ষে ৬ অক্ষর)"
+                  className="pr-10"
                   data-testid="input-new-password"
                 />
-                <Button
+                <button
                   type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-0 top-0"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                   data-testid="button-toggle-new-password"
                 >
                   {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </Button>
+                </button>
               </div>
               {errors.newPassword && (
                 <p className="text-sm text-destructive">{errors.newPassword.message}</p>
@@ -146,18 +144,17 @@ export default function PasswordChange() {
                   type={showConfirmPassword ? "text" : "password"}
                   {...register("confirmPassword")}
                   placeholder="নতুন পাসওয়ার্ড পুনরায় লিখুন"
+                  className="pr-10"
                   data-testid="input-confirm-password"
                 />
-                <Button
+                <button
                   type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-0 top-0"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   data-testid="button-toggle-confirm-password"
                 >
                   {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </Button>
+                </button>
               </div>
               {errors.confirmPassword && (
                 <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
